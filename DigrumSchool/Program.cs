@@ -1,8 +1,14 @@
+using DigrumSchool.Config;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<SchoolContext>(opt =>
+opt.UseNpgsql("Server=localhost;Port=5432;Database=DigrumSchool;UserId=postgres;Password=postgres"));
 
 var app = builder.Build();
 
