@@ -24,19 +24,6 @@ namespace DigrumSchool.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Courses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    GroupName = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Courses", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Languages",
                 columns: table => new
                 {
@@ -118,24 +105,20 @@ namespace DigrumSchool.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CourseUser",
+                name: "Courses",
                 columns: table => new
                 {
-                    CoursesId = table.Column<int>(type: "integer", nullable: false),
-                    ParticipantsId = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreatorId = table.Column<int>(type: "integer", nullable: false),
+                    GroupName = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseUser", x => new { x.CoursesId, x.ParticipantsId });
+                    table.PrimaryKey("PK_Courses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CourseUser_Courses_CoursesId",
-                        column: x => x.CoursesId,
-                        principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CourseUser_Users_ParticipantsId",
-                        column: x => x.ParticipantsId,
+                        name: "FK_Courses_Users_CreatorId",
+                        column: x => x.CreatorId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -195,6 +178,30 @@ namespace DigrumSchool.Migrations
                     table.ForeignKey(
                         name: "FK_Tests_Users_CreatorId",
                         column: x => x.CreatorId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CourseUser",
+                columns: table => new
+                {
+                    CoursesId = table.Column<int>(type: "integer", nullable: false),
+                    ParticipantsId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseUser", x => new { x.CoursesId, x.ParticipantsId });
+                    table.ForeignKey(
+                        name: "FK_CourseUser_Courses_CoursesId",
+                        column: x => x.CoursesId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CourseUser_Users_ParticipantsId",
+                        column: x => x.ParticipantsId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -297,6 +304,11 @@ namespace DigrumSchool.Migrations
                 name: "IX_CompletedTests_UserId",
                 table: "CompletedTests",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_CreatorId",
+                table: "Courses",
+                column: "CreatorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseTest_TestsId",

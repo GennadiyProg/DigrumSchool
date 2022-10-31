@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DigrumSchool.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20221031054330_InitMigration")]
+    [Migration("20221031065708_InitMigration")]
     partial class InitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -113,11 +113,16 @@ namespace DigrumSchool.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("GroupName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Courses");
                 });
@@ -347,6 +352,17 @@ namespace DigrumSchool.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("DigrumSchool.Models.Course", b =>
+                {
+                    b.HasOne("DigrumSchool.Models.User", "Creator")
+                        .WithMany("CreatedCourses")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
+                });
+
             modelBuilder.Entity("DigrumSchool.Models.Test", b =>
                 {
                     b.HasOne("DigrumSchool.Models.Category", "Category")
@@ -424,6 +440,11 @@ namespace DigrumSchool.Migrations
                         .HasForeignKey("WordsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DigrumSchool.Models.User", b =>
+                {
+                    b.Navigation("CreatedCourses");
                 });
 #pragma warning restore 612, 618
         }

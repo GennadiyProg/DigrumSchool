@@ -6,10 +6,6 @@ namespace DigrumSchool.Config
 {
     public class SchoolContext : DbContext
     {
-        public SchoolContext(DbContextOptions<SchoolContext> options) : base(options)
-        {
-        }
-
         public DbSet<Role> Roles { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<User> Users { get; set; }
@@ -19,5 +15,17 @@ namespace DigrumSchool.Config
         public DbSet<Test> Tests { get; set; }
         public DbSet<Translate> Translates { get; set; }
         public DbSet<Word> Words { get; set; }
+
+        public SchoolContext(DbContextOptions<SchoolContext> options) : base(options)
+        {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Course>()
+                .HasOne(c => c.Creator)
+                .WithMany(u => u.CreatedCourses)
+                .HasForeignKey(c => c.CreatorId);
+        }
     }
 }
