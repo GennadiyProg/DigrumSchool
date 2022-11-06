@@ -1,19 +1,28 @@
 import React from 'react';
-import './App.css';
+import {MainLayout} from './layouts/MainLayout';
+import {CssBaseline, ThemeProvider} from "@mui/material";
+import {BrowserRouter} from "react-router-dom";
+import {AppRouter} from "./router";
+import {themeStore} from './stores/ThemeStore';
+import {observer} from "mobx-react-lite";
 
-const fetchData = async () => {
-    const data = await fetch('api/WeatherForecast')
-    const normData = await data.json();
-    console.log(normData);
-}
+const WITHOUT_MAIN_LAYOUT = ['/registration', '/login']
 
-function App() {
+export const App = observer(() => {
   return (
-    <div className="App">
-          it is workdsfsf
-          <button onClick={fetchData}>click</button>
-    </div>
+    <BrowserRouter>
+      <ThemeProvider theme={themeStore.theme}>
+        <CssBaseline>
+          {WITHOUT_MAIN_LAYOUT.includes(window.location.pathname)
+            ? (<AppRouter></AppRouter>)
+            : (
+              <MainLayout>
+                <AppRouter></AppRouter>
+              </MainLayout>
+            )
+          }
+        </CssBaseline>
+      </ThemeProvider>
+    </BrowserRouter>
   );
-}
-
-export default App;
+})
