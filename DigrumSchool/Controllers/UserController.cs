@@ -1,40 +1,59 @@
-﻿using DigrumSchool.Dto;
+﻿using DigrumSchool.Config;
+using DigrumSchool.Dto;
 using DigrumSchool.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Security.Claims;
 
 namespace DigrumSchool.Controllers
 {
     [ApiController]
     [Route("user")]
-    [Authorize]
     public class UserController : Controller
     {
-        public static User localUser;
+        private readonly SchoolContext _context;
 
-        [HttpPost("register"), AllowAnonymous]
+        public UserController(SchoolContext context)
+        {
+            _context = context;
+        }
+
+        [HttpPost("register")]
         public ActionResult<User> Index(UserDto userDto)
         {
-            localUser = new User();
-            localUser.Login = userDto.UserName;
+            User localUser = new User();
+            localUser.Username = userDto.UserName;
             localUser.Password = userDto.Password;
+            localUser.IsActive = true;
+            Role role = _context.Roles.FirstOrDefault();
+            localUser.Role = role;
+            _context.Users.Add(localUser);
+            _context.SaveChanges();
             return localUser;
         }
 
-        [HttpPost("login"), AllowAnonymous]
-        public ActionResult<string> Login(UserDto userDto)
+        [HttpPost("login")]
+        public ActionResult<User> Login(UserDto userDto)
         {
-            if (userDto.UserName.Equals(localUser.Login))
+            User? user = _context.Users.FirstOrDefault(user => user.Username.Equals(userDto.UserName) && user.Password.Equals(userDto.Password));
+            if (user != null)
             {
-                List<Claim> claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, localUser.Login),
-                    new Claim(ClaimTypes.Role, "teacher")
-                };
-                return localUser.Login;
+                user.IsActive = true;
+                _context.SaveChanges();
+                return user;
             }
             return Unauthorized();
+        }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            List<User> users = _context.Users.Where(user => user.IsActive == true).ToList();
+            users.ForEach(user => user.IsActive = false);
+            _context.SaveChanges();
+            return Ok();
         }
     }
 }
