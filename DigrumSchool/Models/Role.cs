@@ -1,4 +1,6 @@
-﻿namespace DigrumSchool.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DigrumSchool.Models
 {
     public class Role
     {
