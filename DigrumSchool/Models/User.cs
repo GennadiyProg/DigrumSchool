@@ -5,7 +5,6 @@ namespace DigrumSchool.Models
     public class User
     {
         public int Id { get; set; }
-        public string Login { get; set; }
         public string Password { get; set; }
         public string Username { get; set; }
         public ICollection<Course> Courses { get; set; }
@@ -13,5 +12,6 @@ namespace DigrumSchool.Models
         public ICollection<Language> Languages { get; set; }
         public Role Role { get; set; }
         public int RoleId { get; set; }
+        public bool IsActive { get; set; }
     }
 }
