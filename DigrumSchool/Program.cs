@@ -1,4 +1,5 @@
 using DigrumSchool.Config;
+using DigrumSchool.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<SchoolContext>(opt =>
 opt.UseNpgsql("Server=localhost;Port=5432;Database=DigrumSchool;UserId=postgres;Password=postgres"));
+builder.Services.AddScoped<TestService>();
 
 var app = builder.Build();
 
