@@ -8,7 +8,7 @@ import {LoginLayout} from "../layouts/LoginLayout";
 export const Login = () => {
 
   return (
-    <LoginLayout>
+    <>
       <Typography variant="h2" gutterBottom sx={{
         fontSize: '30px',
         textAlign: 'center',
@@ -23,6 +23,6 @@ export const Login = () => {
       }}>
         <Button variant="outlined">Войти</Button>
       </Box>
-    </LoginLayout>
+    </>
   );
 };
