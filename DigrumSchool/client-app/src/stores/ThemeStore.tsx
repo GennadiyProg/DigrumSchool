@@ -3,7 +3,7 @@ import {createTheme, PaletteMode} from "@mui/material";
 import {CustomTheme, getThemeByMode} from "../themes/BasicTheme";
 
 class ThemeStore {
-  mode: PaletteMode = 'light'
+  mode: PaletteMode = 'dark'
   theme: CustomTheme
 
   constructor() {

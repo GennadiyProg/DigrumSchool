@@ -6,11 +6,11 @@ export const LoginContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: ${themeStore.theme.customPalette.backgroundPrimary.main}
+  background: ${() => themeStore.theme.customPalette.backgroundPrimary.main}
 `
 
 export const LoginWrapper = styled.div`
   padding: 30px 20px;
-  background: ${themeStore.theme.customPalette.backgroundPrimary.light};
-  border-radius: ${themeStore.theme.border.radius};
+  background: ${() => themeStore.theme.customPalette.backgroundPrimary.light};
+  border-radius: ${() => themeStore.theme.border.radius};
 `

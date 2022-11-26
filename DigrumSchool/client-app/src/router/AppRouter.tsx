@@ -1,11 +1,17 @@
 import React from 'react';
 import {Route, Routes} from "react-router-dom";
-import {publicRoutes} from "./routes";
+import {routes} from "./routes";
 
 export const AppRouter = () => {
   return (
     <Routes>
-      {publicRoutes.map(({path, component}) => <Route key={path} path={path} element={component} />)}
+      {
+        Object.entries(routes).map(([, value]) => (
+          <Route key={value.path} path={value.path} element={value.component}>
+            {value.routes.map((route) => <Route key={route.path} path={route.path} element={route.component}/>)}
+          </Route>
+        ))
+      }
     </Routes>
-  );
-};
+  )
+}

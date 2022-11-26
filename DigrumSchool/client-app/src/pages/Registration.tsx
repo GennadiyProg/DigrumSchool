@@ -7,7 +7,7 @@ import {LoginLayout} from "../layouts/LoginLayout";
 
 export const Registration = () => {
   return (
-    <LoginLayout>
+    <>
       <Typography variant="h2" gutterBottom sx={{
         fontSize: '30px',
         textAlign: 'center',
@@ -22,6 +22,6 @@ export const Registration = () => {
       }}>
         <Button variant="outlined">Зарегистрироваться</Button>
       </Box>
-    </LoginLayout>
+    </>
   );
 };
