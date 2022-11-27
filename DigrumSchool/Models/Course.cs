@@ -8,8 +8,8 @@ namespace DigrumSchool.Models
         [ForeignKey("Creator")]
         public int CreatorId { get; set; }
         public User Creator { get; set; }
-        public ICollection<User> Participants { get; set; }
-        public ICollection<Test> Tests { get; set; }
+        public ICollection<User>? Participants { get; set; }
+        public ICollection<Test>? Tests { get; set; }
         public string GroupName { get; set; }
     }
 }

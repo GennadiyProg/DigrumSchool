@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DigrumSchool.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20221125095113_InitMigration")]
+    [Migration("20221127053139_InitMigration")]
     partial class InitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -196,7 +196,7 @@ namespace DigrumSchool.Migrations
                     b.ToTable("Tests");
                 });
 
-            modelBuilder.Entity("DigrumSchool.Models.Translate", b =>
+            modelBuilder.Entity("DigrumSchool.Models.Translation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -208,9 +208,14 @@ namespace DigrumSchool.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("WordId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Translates");
+                    b.HasIndex("WordId");
+
+                    b.ToTable("Translations");
                 });
 
             modelBuilder.Entity("DigrumSchool.Models.User", b =>
@@ -254,12 +259,7 @@ namespace DigrumSchool.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("TranslateID")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TranslateID");
 
                     b.ToTable("Words");
                 });
@@ -389,6 +389,13 @@ namespace DigrumSchool.Migrations
                     b.Navigation("Language");
                 });
 
+            modelBuilder.Entity("DigrumSchool.Models.Translation", b =>
+                {
+                    b.HasOne("DigrumSchool.Models.Word", null)
+                        .WithMany("Translations")
+                        .HasForeignKey("WordId");
+                });
+
             modelBuilder.Entity("DigrumSchool.Models.User", b =>
                 {
                     b.HasOne("DigrumSchool.Models.Role", "Role")
@@ -398,17 +405,6 @@ namespace DigrumSchool.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("DigrumSchool.Models.Word", b =>
-                {
-                    b.HasOne("DigrumSchool.Models.Translate", "Translate")
-                        .WithMany()
-                        .HasForeignKey("TranslateID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Translate");
                 });
 
             modelBuilder.Entity("LanguageUser", b =>
@@ -444,6 +440,11 @@ namespace DigrumSchool.Migrations
             modelBuilder.Entity("DigrumSchool.Models.User", b =>
                 {
                     b.Navigation("CreatedCourses");
+                });
+
+            modelBuilder.Entity("DigrumSchool.Models.Word", b =>
+                {
+                    b.Navigation("Translations");
                 });
 #pragma warning restore 612, 618
         }

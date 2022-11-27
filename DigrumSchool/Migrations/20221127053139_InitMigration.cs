@@ -50,16 +50,16 @@ namespace DigrumSchool.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Translates",
+                name: "Words",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Value = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Translates", x => x.Id);
+                    table.PrimaryKey("PK_Words", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,23 +85,22 @@ namespace DigrumSchool.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Words",
+                name: "Translations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    TranslateID = table.Column<int>(type: "integer", nullable: false)
+                    Value = table.Column<string>(type: "text", nullable: false),
+                    WordId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Words", x => x.Id);
+                    table.PrimaryKey("PK_Translations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Words_Translates_TranslateID",
-                        column: x => x.TranslateID,
-                        principalTable: "Translates",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Translations_Words_WordId",
+                        column: x => x.WordId,
+                        principalTable: "Words",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -346,14 +345,14 @@ namespace DigrumSchool.Migrations
                 column: "WordsId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Translations_WordId",
+                table: "Translations",
+                column: "WordId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
                 table: "Users",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Words_TranslateID",
-                table: "Words",
-                column: "TranslateID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -374,6 +373,9 @@ namespace DigrumSchool.Migrations
                 name: "TestWord");
 
             migrationBuilder.DropTable(
+                name: "Translations");
+
+            migrationBuilder.DropTable(
                 name: "Courses");
 
             migrationBuilder.DropTable(
@@ -390,9 +392,6 @@ namespace DigrumSchool.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Translates");
 
             migrationBuilder.DropTable(
                 name: "Roles");

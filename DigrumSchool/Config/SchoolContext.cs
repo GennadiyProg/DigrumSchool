@@ -13,7 +13,7 @@ namespace DigrumSchool.Config
         public DbSet<CompletedTest> CompletedTests { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Test> Tests { get; set; }
-        public DbSet<Translate> Translates { get; set; }
+        public DbSet<Translation> Translations { get; set; }
         public DbSet<Word> Words { get; set; }
 
         public SchoolContext(DbContextOptions<SchoolContext> options) : base(options)
