@@ -1,4 +1,6 @@
-﻿namespace DigrumSchool.Models
+﻿using System.Text.Json.Serialization;
+
+namespace DigrumSchool.Models
 {
     public class Test
     {
@@ -11,6 +13,7 @@
         public User Creator { get; set; }
         public int CreatorId { get; set; }
         public ICollection<Word> Words { get; set; }
+        [JsonIgnore]
         public ICollection<Course> Courses { get; set; }
         public bool IsGeneral { get; set; }
     }
