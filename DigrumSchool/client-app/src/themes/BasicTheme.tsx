@@ -41,7 +41,7 @@ export const getThemeByMode = (mode: PaletteMode) => ({
           // Dark mode
           backgroundPrimary: {
             main: '#222626',
-            light: '#EBECE7'
+            light: '#1e1e1e'
           },
           backgroundGlobal: {
             main: '#17181A'

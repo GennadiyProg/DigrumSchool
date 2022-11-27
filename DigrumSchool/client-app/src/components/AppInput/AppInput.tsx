@@ -9,6 +9,8 @@ interface AppInputProps {
   icon?: ReactNode,
   required?: boolean,
   children?: ReactNode,
+  handler: Function,
+  value?: string,
 }
 
 export const AppInput: FC<AppInputProps> = (props) => {
@@ -18,15 +20,21 @@ export const AppInput: FC<AppInputProps> = (props) => {
       ...props.sx
     }}>
       <InputLabel htmlFor={props.id}>{props.label}</InputLabel>
-      <OutlinedInput type={props.type || 'text'} label={props.label} id={props.id} endAdornment={
-        props.icon ?
-          (
-            <InputAdornment position="end">
-              {props.icon}
-            </InputAdornment>
-          )
-          : null
-      }/>
+      <OutlinedInput
+        value={props.value}
+        onChange={(e) => props.handler(e.target.value)}
+        type={props.type || 'text'}
+        label={props.label}
+        id={props.id}
+        endAdornment={
+          props.icon ?
+            (
+              <InputAdornment position="end">
+               {props.icon}
+              </InputAdornment>
+            )
+            : null
+        }/>
     </FormControl>
   );
 };
