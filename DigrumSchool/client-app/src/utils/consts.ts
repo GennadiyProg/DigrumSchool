@@ -9,3 +9,9 @@ export const paths = {
 // layouts
 export const MAIN_LAYOUT = '/'
 export const LOGIN_LAYOUT = '/'
+
+export enum AuthStatus {
+  none = 'none',
+  success = 'success',
+  error = 'error',
+}

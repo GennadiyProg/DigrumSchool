@@ -2,7 +2,7 @@
   "name": "client-app",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://localhost:7084",
+  "proxy": "http://localhost:5084",
   "type": "module",
   "dependencies": {
     "@mui/icons-material": "^5.10.9",

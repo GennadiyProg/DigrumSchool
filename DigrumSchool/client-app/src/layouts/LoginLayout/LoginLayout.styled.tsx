@@ -1,5 +1,10 @@
 import styled from "styled-components";
 import {themeStore} from "../../stores/ThemeStore";
+import {AuthStatus} from "../../utils/consts";
+
+interface LoginWrapperProps {
+  status: AuthStatus
+}
 
 export const LoginContainer = styled.div`
   display: flex;
@@ -9,8 +14,15 @@ export const LoginContainer = styled.div`
   background: ${() => themeStore.theme.customPalette.backgroundPrimary.main}
 `
 
-export const LoginWrapper = styled.div`
+const colors = {
+  [AuthStatus.none]: 'transparent',
+  [AuthStatus.success]: 'green',
+  [AuthStatus.error]: 'red',
+}
+
+export const LoginWrapper = styled.div<LoginWrapperProps>`
   padding: 30px 20px;
   background: ${() => themeStore.theme.customPalette.backgroundPrimary.light};
   border-radius: ${() => themeStore.theme.border.radius};
+  border: 1px solid ${({status}) => colors[status]};
 `
