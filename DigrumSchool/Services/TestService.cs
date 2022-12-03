@@ -13,7 +13,7 @@ namespace DigrumSchool.Services
             _context = context;
         }
 
-        public Test Create(TestDto testDto)
+        public Test Create(TestDto testDto, User currentUser)
         {
             Test test = new Test();
             test.Title = testDto.Title;
@@ -40,7 +40,7 @@ namespace DigrumSchool.Services
                 test.Words.Add(newWord);
             }
             test.IsGeneral = testDto.IsGeneral;
-            test.Creator = _context.Users.Where(u => u.IsActive).FirstOrDefault();
+            test.Creator = currentUser;
             _context.Tests.Add(test);
             _context.SaveChanges();
             return test;

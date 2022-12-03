@@ -21,16 +21,15 @@ namespace DigrumSchool.Controllers
         }
 
         [HttpPost("register")]
-        public ActionResult<User> Index(UserDto userDto)
+        public ActionResult<User> Register(UserDto userDto)
         {
             User localUser = new User();
             localUser.Username = userDto.UserName;
             localUser.Password = userDto.Password;
-            localUser.IsActive = true;
-            Role role = _context.Roles.FirstOrDefault();
+            Role role = _context.Roles.FirstOrDefault() ?? throw new ArgumentNullException();
             localUser.Role = role;
-            _context.Users.Add(localUser);
             _context.SaveChanges();
+            HttpContext.Response.Cookies.Append("login", localUser.Username);
             return localUser;
         }
 
@@ -38,10 +37,10 @@ namespace DigrumSchool.Controllers
         public ActionResult<User> Login(UserDto userDto)
         {
             User? user = _context.Users.FirstOrDefault(user => user.Username.Equals(userDto.UserName) && user.Password.Equals(userDto.Password));
+            
             if (user != null)
             {
-                user.IsActive = true;
-                _context.SaveChanges();
+                HttpContext.Response.Cookies.Append("login", user.Username);
                 return user;
             }
             return Unauthorized();
@@ -50,9 +49,7 @@ namespace DigrumSchool.Controllers
         [HttpPost("logout")]
         public IActionResult Logout()
         {
-            List<User> users = _context.Users.Where(user => user.IsActive == true).ToList();
-            users.ForEach(user => user.IsActive = false);
-            _context.SaveChanges();
+            HttpContext.Response.Cookies.Delete("login");
             return Ok();
         }
     }

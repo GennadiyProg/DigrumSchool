@@ -224,9 +224,6 @@ namespace DigrumSchool.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");

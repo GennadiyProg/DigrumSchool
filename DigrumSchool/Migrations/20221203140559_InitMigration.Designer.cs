@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DigrumSchool.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20221127053139_InitMigration")]
+    [Migration("20221203140559_InitMigration")]
     partial class InitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -225,9 +225,6 @@ namespace DigrumSchool.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Password")
                         .IsRequired()

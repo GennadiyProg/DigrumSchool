@@ -4,6 +4,7 @@ using DigrumSchool.Models;
 using DigrumSchool.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DigrumSchool.Controllers
 {
@@ -23,11 +24,13 @@ namespace DigrumSchool.Controllers
         [HttpPost("create")]
         public ActionResult<Test> Create(TestDto testDto)
         {
-            if(_context.Users.Where(u => u.IsActive).FirstOrDefault() == null)
+            string? userName = HttpContext.Request.Cookies["login"];
+            User? currentUser = _context.Users.Where(u => u.Username == userName).FirstOrDefault();
+            if (currentUser == null)
             {
                 return Unauthorized();
             }
-            return testService.Create(testDto);
+            return testService.Create(testDto, currentUser);
         }
     }
 }
