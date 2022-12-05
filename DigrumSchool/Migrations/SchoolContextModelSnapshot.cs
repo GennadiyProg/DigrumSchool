@@ -324,8 +324,7 @@ namespace DigrumSchool.Migrations
                     b.HasOne("DigrumSchool.Models.Course", "Course")
                         .WithMany()
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DigrumSchool.Models.Test", "Test")
                         .WithMany()

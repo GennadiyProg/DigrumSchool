@@ -1,6 +1,7 @@
 ﻿using DigrumSchool.Config;
 using DigrumSchool.Dto;
 using DigrumSchool.Models;
+using DigrumSchool.Models.Dto;
 
 namespace DigrumSchool.Services
 {
@@ -44,6 +45,40 @@ namespace DigrumSchool.Services
             _context.Tests.Add(test);
             _context.SaveChanges();
             return test;
+        }
+
+        public List<Test> FindAllTestsByCreator(string username)
+        {
+            return _context.Tests.Where(t => t.Creator.Username == username).ToList();
+        }
+
+        public Test FindById(int id)
+        {
+            return _context.Tests.Where(t => t.Id == id).FirstOrDefault() ?? new Test();
+        }
+
+        public CompletedTest CompleteTest(CompletedTestDto completedTestDto, User user)     
+        {
+            CompletedTest test = new CompletedTest();
+            test.Test = _context.Tests.Where(t => t.Id == completedTestDto.TestId).First();
+            test.User = user;
+            test.Date = DateTime.Now;
+            test.Course = completedTestDto.CourseId == null ? null : _context.Courses.Where(c => c.Id == completedTestDto.CourseId).FirstOrDefault();
+            test.Score = completedTestDto.Score;
+            _context.CompletedTests.Add(test);
+            _context.SaveChanges();
+            return test;
+        }
+
+        public List<CompletedTest> FindCompletedTests(int? id, User user)
+        {
+            if(id != null)
+            {
+                return _context.CompletedTests.Where(t => t.Id == id).ToList();
+            } else
+            {
+                return _context.CompletedTests.Where(t => t.User.Id == user.Id).ToList();
+            }
         }
     }
 }
