@@ -4,6 +4,8 @@ export const paths = {
   HOME_ROUTE: '/',
   COURSES_ROUTE: '/courses',
   TEST_ROUTE: '/test',
+  CREATE_TEST_ROUTE: '/create',
+  MY_TESTS_ROUTE: '/my-tests',
 }
 
 // layouts

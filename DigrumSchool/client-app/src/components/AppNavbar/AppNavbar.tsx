@@ -14,10 +14,10 @@ export const AppNavbar:FC<AppNavbarProps> = ({toggle}) => {
     <AppNavbarContainer style={{background: theme.customPalette.backgroundPrimary.main}}>
       <AppBar color={'transparent'}>
         <Toolbar variant="dense">
-          <IconButton onClick={() => toggle()} edge="start" color="inherit">
+          <IconButton onClick={() => toggle()} edge="start" color="default">
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" color="inherit" component="div">
+          <Typography variant="h6" color="white" component="div">
             DigrumSchool
           </Typography>
         </Toolbar>

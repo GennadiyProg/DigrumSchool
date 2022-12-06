@@ -5,6 +5,8 @@ export interface CustomTheme extends Theme {
   customPalette: {
     backgroundPrimary: PaletteColor,
     backgroundGlobal: PaletteColor,
+    secondary: PaletteColor,
+    testCard: PaletteColor,
   },
   border: {
     radius: string
@@ -12,17 +14,31 @@ export interface CustomTheme extends Theme {
 }
 
 export const getThemeByMode = (mode: PaletteMode) => ({
+  overrides: {
+    MuiCssBaseline: {
+      body: {
+        "::-webkit-scrollbar": {
+          backgroundColor: "transparent",
+          width: '5px',
+        },
+        "::-webkit-scrollbar-thumb": {
+          borderRadius: '50%',
+          backgroundColor: 'red',
+        },
+      }
+    }
+  },
   palette: {
     mode,
     ...(mode === 'light'
-    ? {
-      // Light mode
+        ? {
+          // Light mode
 
-    }
-    : {
-      // Dark mode
-        primary: blue,
-      }
+        }
+        : {
+          // Dark mode
+          primary: blue,
+        }
     )
   },
   customPalette: {
@@ -35,6 +51,13 @@ export const getThemeByMode = (mode: PaletteMode) => ({
           },
           backgroundGlobal: {
             main: '#ffffff'
+          },
+          secondary: {
+            main: '#ffffff'
+          },
+          testCard: {
+            main: '#fff',
+            contrastText: '#000'
           }
         }
         : {
@@ -45,6 +68,13 @@ export const getThemeByMode = (mode: PaletteMode) => ({
           },
           backgroundGlobal: {
             main: '#17181A'
+          },
+          secondary: {
+            main: '#464646'
+          },
+          testCard: {
+            main: '#222626',
+            contrastText: '#fff'
           }
         }
     ),
