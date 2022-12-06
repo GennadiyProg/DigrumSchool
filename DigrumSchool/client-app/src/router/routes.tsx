@@ -4,11 +4,14 @@ import {Home, Login, Registration} from "../pages";
 import {MainLayout} from "../layouts/MainLayout";
 import {LoginLayout} from "../layouts/LoginLayout";
 import {Courses} from "../pages/Courses";
-import {Test} from "../pages/Test";
+import {TestPage} from "../pages/Test";
+import {CreateTest} from "../pages/CreateTest";
+import {UserTests} from "../pages/UserTests";
 
 interface Route {
   path: string,
   component: ReactNode
+  routes?: Route[]
 }
 
 export const authRoutes = [
@@ -30,8 +33,16 @@ export const routes = {
       },
       {
         path: paths.TEST_ROUTE,
-        component: <Test />
+        component: <TestPage />
       },
+      {
+        path: paths.CREATE_TEST_ROUTE,
+        component: <CreateTest />
+      },
+      {
+        path: paths.MY_TESTS_ROUTE,
+        component: <UserTests/>
+      }
     ] as Route[]
   },
   LoginLayout: {
