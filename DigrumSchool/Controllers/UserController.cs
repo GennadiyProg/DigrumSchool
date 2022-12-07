@@ -28,6 +28,7 @@ namespace DigrumSchool.Controllers
             localUser.Password = userDto.Password;
             Role role = _context.Roles.FirstOrDefault() ?? throw new ArgumentNullException();
             localUser.Role = role;
+            _context.Users.Add(localUser);
             _context.SaveChanges();
             HttpContext.Response.Cookies.Append("login", localUser.Username);
             return localUser;

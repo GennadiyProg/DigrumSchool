@@ -215,7 +215,7 @@ namespace DigrumSchool.Migrations
                     TestId = table.Column<int>(type: "integer", nullable: false),
                     Score = table.Column<int>(type: "integer", nullable: false),
                     Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CourseId = table.Column<int>(type: "integer", nullable: false)
+                    CourseId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
