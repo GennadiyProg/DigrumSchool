@@ -7,7 +7,11 @@ export const AppRouter = () => {
     <Routes>
       {
         Object.entries(routes).map(([, value]) => (
-          <Route key={value.path} path={value.path} element={value.component}>
+          <Route
+            key={value.path}
+            path={value.path}
+            element={value.component}
+          >
             {value.routes.map((route) => <Route key={route.path} path={route.path} element={route.component}/>)}
           </Route>
         ))

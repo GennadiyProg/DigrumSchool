@@ -3,9 +3,11 @@ import {Box, List, ListItemButton, ListItemIcon, ListItemText, useTheme} from "@
 import RoofingOutlinedIcon from '@mui/icons-material/RoofingOutlined';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import FlagIcon from '@mui/icons-material/Flag';
 import {Link} from "react-router-dom";
-import {MainMenuStyled} from "./MainMenu.styled";
 import {observer} from "mobx-react-lite";
+import {MainMenuStyled} from "./MainMenu.styled";
 
 interface MainMenuProps {
   isOpen: boolean,
@@ -19,41 +21,56 @@ interface menuItem {
 
 const menuItems: menuItem[] = [
   {
-    icon: <RoofingOutlinedIcon />,
+    icon: <RoofingOutlinedIcon/>,
     title: "Home",
     path: "/"
   },
   {
-    icon: <SchoolOutlinedIcon />,
+    icon: <SchoolOutlinedIcon/>,
     title: "Cousres",
     path: "/courses"
   },
   {
-    icon: <LogoutOutlinedIcon />,
+    icon: <LogoutOutlinedIcon/>,
     title: "Logout",
     path: "/login"
-  }
+  },
+  {
+    icon: <AddCircleOutlineIcon/>,
+    title: "Create test",
+    path: "/create",
+  },
+  {
+    icon: <FlagIcon/>,
+    title: "My tests",
+    path: "/my-tests",
+  },
 ]
 
-export const MainMenu:FC<MainMenuProps> = observer(({isOpen}) => {
+export const MainMenu: FC<MainMenuProps> = observer(({isOpen}) => {
   const theme = useTheme()
 
   return (
     <MainMenuStyled isOpen={isOpen} theme={theme}>
-        <List>
-          {menuItems.map(item => (
-            <Link key={item.title} to={item.path}>
-              <ListItemButton sx={{
-                minHeight: '48px'
-              }}>
-                <ListItemIcon sx={{
-                  minWidth: '50px'
-                }}>{item.icon}</ListItemIcon>
-                {isOpen && <ListItemText>{item.title + isOpen}</ListItemText>}
-              </ListItemButton>
-            </Link>
-          ))}
-        </List>
+      <List>
+        {menuItems.map(item => (
+          <Link style={{
+            textDecoration: 'none',
+          }} key={item.title} to={item.path}>
+            <ListItemButton sx={{
+              minHeight: '48px',
+              textDecoration: 'none',
+              color: '#fff'
+            }}>
+              <ListItemIcon sx={{
+                minWidth: '50px',
+                color: '#fff',
+              }}>{item.icon}</ListItemIcon>
+              {isOpen && <ListItemText>{item.title}</ListItemText>}
+            </ListItemButton>
+          </Link>
+        ))}
+      </List>
     </MainMenuStyled>
   );
 })

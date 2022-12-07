@@ -15,8 +15,7 @@ interface AppInputProps {
 
 export const AppInput: FC<AppInputProps> = (props) => {
   return (
-    <FormControl variant="outlined" fullWidth required sx={{
-      marginTop: '10px',
+    <FormControl variant="outlined" fullWidth required={props.required} sx={{
       ...props.sx
     }}>
       <InputLabel htmlFor={props.id}>{props.label}</InputLabel>
