@@ -1,85 +1,55 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {UserTestsContainer} from "./UserTests.styled";
-import {Typography} from "@mui/material";
+import {Alert, CircularProgress, Typography, Zoom} from "@mui/material";
 import {UserTestsList} from "./components/UserTestsList";
 import {Test} from "../../utils/types";
-
-const initialTest: Test[] = [
-  {
-    id: '1',
-    title: 'colors',
-    creator: '143',
-    isGeneral: false,
-    words: [
-      {
-        id: '1',
-        title: 'red',
-        translates: ['красный', 'рыжий']
-      },
-      {
-        id: '2',
-        title: 'green',
-        translates: ['зеленый']
-      },
-      {
-        id: '3',
-        title: 'yellow',
-        translates: ['желтый']
-      },
-    ]
-  },
-  {
-    id: '2',
-    title: 'colors',
-    creator: '143',
-    isGeneral: false,
-    words: [
-      {
-        id: '1',
-        title: 'red',
-        translates: ['красный', 'рыжий']
-      },
-      {
-        id: '2',
-        title: 'green',
-        translates: ['зеленый']
-      },
-      {
-        id: '3',
-        title: 'yellow',
-        translates: ['желтый']
-      },
-    ]
-  }, {
-    id: '3',
-    title: 'colors',
-    creator: '143',
-    isGeneral: false,
-    words: [
-      {
-        id: '1',
-        title: 'red',
-        translates: ['красный', 'рыжий']
-      },
-      {
-        id: '2',
-        title: 'green',
-        translates: ['зеленый']
-      },
-      {
-        id: '3',
-        title: 'yellow',
-        translates: ['желтый']
-      },
-    ]
-  }
-]
+import {useLoaderFetch} from "../../hooks/useLoaderFetch";
+import {deleteTestById, getAllByUser} from "../../api/Test";
+import {useAlert} from "../../hooks/useAlert";
 
 export const UserTests = () => {
+  const {isLoading, LoaderFetch} = useLoaderFetch(getAllByUser)
+  const {isLoading: isDelLoading, LoaderFetch: LoaderDelete} = useLoaderFetch(deleteTestById)
+  const [tests, setTests] = useState<Test[]>([])
+  const {alertData, setAlertData} = useAlert()
+
+  useEffect(() => {
+    getTests()
+  }, [])
+
+  const getTests = async () => {
+    const response = await LoaderFetch()
+    const data = await response.json()
+    setTests(data)
+  }
+
+  const removeTest = async (id: number) => {
+    setAlertData({...alertData, isShow: true, message: 'Удаляем...'})
+    const response = await LoaderDelete(id)
+    response.ok
+      ? setAlertData({isShow: true, message: 'Успешно удалили!', type: 'success'})
+      : setAlertData({isShow: true, message: 'Произошла непредвиденная ошибка. Приносим свои извинения :(', type: 'error'})
+    const newTests = tests.filter(t => t.id !== id)
+    setTests(newTests)
+  }
+
   return (
     <UserTestsContainer>
-      <Typography variant='h4'>Мои тесты</Typography>
-      <UserTestsList tests={initialTest}/>
+      {
+        isLoading
+          ? <CircularProgress/>
+          : (
+            <>
+              <Typography variant='h4'>Мои тесты</Typography>
+              {(
+                <Zoom in={isDelLoading && alertData.isShow}>
+                  <Alert severity={alertData.type}>{alertData.message}</Alert>
+                </Zoom>
+              )}
+              <UserTestsList tests={tests} removeTest={removeTest}/>
+            </>
+          )
+      }
     </UserTestsContainer>
   );
 };

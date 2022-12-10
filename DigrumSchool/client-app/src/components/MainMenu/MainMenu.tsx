@@ -8,6 +8,7 @@ import FlagIcon from '@mui/icons-material/Flag';
 import {Link} from "react-router-dom";
 import {observer} from "mobx-react-lite";
 import {MainMenuStyled} from "./MainMenu.styled";
+import {History} from "@mui/icons-material";
 
 interface MainMenuProps {
   isOpen: boolean,
@@ -44,6 +45,11 @@ const menuItems: menuItem[] = [
     icon: <FlagIcon/>,
     title: "My tests",
     path: "/my-tests",
+  },
+  {
+    icon: <History/>,
+    title: "History",
+    path: "/history",
   },
 ]
 

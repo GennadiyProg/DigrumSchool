@@ -8,9 +8,10 @@ import CancelIcon from '@mui/icons-material/Cancel';
 interface TestCardProps {
   test: Test,
   handleStart: () => void,
+  handleCancel: () => void,
 }
 
-export const TestCard:FC<TestCardProps> = ({test, handleStart}) => {
+export const TestCard:FC<TestCardProps> = ({test, handleStart, handleCancel}) => {
   const theme: CustomTheme = useTheme()
   const cancelColor = {
     color: theme.customPalette.secondary.main,
@@ -18,7 +19,7 @@ export const TestCard:FC<TestCardProps> = ({test, handleStart}) => {
   }
   return (
     <TestCardWrapper colors={theme.customPalette.testCard}>
-      <Cansel {...cancelColor}>
+      <Cansel onClick={handleCancel} {...cancelColor}>
         <CancelIcon sx={{
           width: '100%',
           height: '100%',

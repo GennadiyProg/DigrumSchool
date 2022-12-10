@@ -1,40 +1,18 @@
-import React, {useState} from 'react';
+import React, {FC, ReactNode, useState} from 'react';
 import {Box, FormControl, FormHelperText, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
 import {CreateTestHeaderContainer} from "../CreateTest.styled";
+import {SelectControl} from "../CreateTest.types";
 
-export const CreateTestHeader = () => {
-  const [category, setCategory] = useState('')
-  const handleChange = (e: SelectChangeEvent) => {
-    setCategory(e.target.value)
-  }
+interface CreateTestHeaderProps {
+  SelectControls: SelectControl[]
+  children?: ReactNode,
+}
 
-  const SelectInputs = [
-    {
-      label: 'category-1',
-      value: category,
-      onChange: handleChange,
-      MenuItems: ['Color', 'Home', 'Other'],
-      helperText: 'Выберите категорию',
-    },
-    {
-      label: 'category-2',
-      value: category,
-      onChange: handleChange,
-      MenuItems: ['Color', 'Home', 'Other'],
-      helperText: 'Выберите категорию',
-    },
-    {
-      label: 'category-3',
-      value: category,
-      onChange: handleChange,
-      MenuItems: ['Color', 'Home', 'Other'],
-      helperText: 'Выберите категорию',
-    }
-  ]
-
+export const CreateTestHeader:FC<CreateTestHeaderProps> = ({SelectControls, children}) => {
   return (
     <CreateTestHeaderContainer>
-      {SelectInputs.map(select => (
+      {children}
+      {SelectControls.map(select => (
         <Box key={select.label} sx={{
           flexGrow: 1,
         }}>

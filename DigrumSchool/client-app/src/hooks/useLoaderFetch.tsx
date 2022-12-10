@@ -1,11 +1,11 @@
 import {useState} from "react";
 
-export function useLoaderFetch(request: Function) {
+export function useLoaderFetch<T extends Array<any>, U>(request: (...args: T) => U) {
   const [isLoading, setLoading] = useState(false)
 
-  const LoaderFetch = async (body: any | undefined) => {
+  async function LoaderFetch(...args: T) {
       setLoading(true)
-      const response: Response = await request(body)
+      const response: Awaited<U> = await request(...args)
       setLoading(false)
       return response
   }

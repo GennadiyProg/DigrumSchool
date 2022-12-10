@@ -1,6 +1,6 @@
 interface UserLoginData {
-  UserName: '',
-  Password: ''
+  UserName: string,
+  Password: string,
 }
 
 export const register = async (body: UserLoginData) => {
