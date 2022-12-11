@@ -77,11 +77,11 @@ namespace DigrumSchool.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CourseId")
+                    b.Property<int?>("CourseId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Score")
                         .HasColumnType("integer");
@@ -323,11 +323,10 @@ namespace DigrumSchool.Migrations
                 {
                     b.HasOne("DigrumSchool.Models.Course", "Course")
                         .WithMany()
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CourseId");
 
                     b.HasOne("DigrumSchool.Models.Test", "Test")
-                        .WithMany()
+                        .WithMany("CompletedTests")
                         .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -429,6 +428,11 @@ namespace DigrumSchool.Migrations
                         .HasForeignKey("WordsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DigrumSchool.Models.Test", b =>
+                {
+                    b.Navigation("CompletedTests");
                 });
 
             modelBuilder.Entity("DigrumSchool.Models.User", b =>

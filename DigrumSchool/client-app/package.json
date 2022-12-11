@@ -5,9 +5,9 @@
   "proxy": "http://localhost:5084",
   "type": "module",
   "dependencies": {
-    "@mui/icons-material": "^5.10.9",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.10.9",
     "@mui/lab": "latest",
     "@mui/material": "latest",
     "@mui/styled-engine-sc": "latest",
@@ -54,7 +54,7 @@
     ]
   },
   "devDependencies": {
-    "@craco/craco": "latest",
+    "@craco/craco": "^7.0.0",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",

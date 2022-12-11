@@ -1,5 +1,6 @@
 ﻿using DigrumSchool.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DigrumSchool.Config
@@ -26,6 +27,49 @@ namespace DigrumSchool.Config
                 .HasOne(c => c.Creator)
                 .WithMany(u => u.CreatedCourses)
                 .HasForeignKey(c => c.CreatorId);
+
+            modelBuilder.Entity<Test>()
+                .HasOne(t => t.Language)
+                .WithMany()
+                .HasForeignKey("LanguageId")
+                .IsRequired();
+
+            modelBuilder.Entity<Test>()
+                .HasOne(t => t.Category)
+                .WithMany()
+                .HasForeignKey("CategoryId")
+                .IsRequired();
+
+            modelBuilder.Entity<Test>()
+                .HasOne(t => t.Creator)
+                .WithMany()
+                .HasForeignKey("CreatorId")
+                .IsRequired();
+
+            modelBuilder.Entity<Test>()
+                .HasMany(t => t.CompletedTests)
+                .WithOne(ct => ct.Test)
+                .HasForeignKey("TestId")
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Role)
+                .WithMany()
+                .HasForeignKey("RoleId")
+                .IsRequired();
+
+            modelBuilder.Entity<CompletedTest>()
+                .HasOne(t => t.User)
+                .WithMany()
+                .HasForeignKey("UserId")
+                .IsRequired();
+
+            modelBuilder.Entity<CompletedTest>()
+                .HasOne(t => t.Course)
+                .WithMany()
+                .HasForeignKey("CourseId")
+                .IsRequired(false);
         }
     }
 }

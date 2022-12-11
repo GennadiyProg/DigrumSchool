@@ -1,6 +1,7 @@
 ﻿using DigrumSchool.Config;
 using DigrumSchool.Dto;
 using DigrumSchool.Models;
+using DigrumSchool.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,23 +14,17 @@ namespace DigrumSchool.Controllers
     [Route("user")]
     public class UserController : Controller
     {
-        private readonly SchoolContext _context;
+        private readonly UserService userService;
 
-        public UserController(SchoolContext context)
+        public UserController(UserService userService)
         {
-            _context = context;
+            this.userService = userService;
         }
 
         [HttpPost("register")]
         public ActionResult<User> Register(UserDto userDto)
         {
-            User localUser = new User();
-            localUser.Username = userDto.UserName;
-            localUser.Password = userDto.Password;
-            Role role = _context.Roles.FirstOrDefault() ?? throw new ArgumentNullException();
-            localUser.Role = role;
-            _context.Users.Add(localUser);
-            _context.SaveChanges();
+            User localUser = userService.Register(userDto);
             HttpContext.Response.Cookies.Append("login", localUser.Username);
             return localUser;
         }
@@ -37,7 +32,7 @@ namespace DigrumSchool.Controllers
         [HttpPost("login")]
         public ActionResult<User> Login(UserDto userDto)
         {
-            User? user = _context.Users.FirstOrDefault(user => user.Username.Equals(userDto.UserName) && user.Password.Equals(userDto.Password));
+            User? user = userService.Login(userDto);
             
             if (user != null)
             {

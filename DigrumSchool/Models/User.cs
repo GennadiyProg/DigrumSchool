@@ -13,6 +13,5 @@ namespace DigrumSchool.Models
         public ICollection<Course> CreatedCourses { get; set; }
         public ICollection<Language> Languages { get; set; }
         public Role Role { get; set; }
-        public int RoleId { get; set; }
     }
 }

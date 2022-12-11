@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DigrumSchool.Migrations
 {
-    public partial class InitMigration : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -214,7 +214,7 @@ namespace DigrumSchool.Migrations
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     TestId = table.Column<int>(type: "integer", nullable: false),
                     Score = table.Column<int>(type: "integer", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CourseId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -224,8 +224,7 @@ namespace DigrumSchool.Migrations
                         name: "FK_CompletedTests_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_CompletedTests_Tests_TestId",
                         column: x => x.TestId,

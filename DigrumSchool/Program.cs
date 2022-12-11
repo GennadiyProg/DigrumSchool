@@ -10,6 +10,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<SchoolContext>(opt =>
 opt.UseNpgsql("Server=localhost;Port=5432;Database=DigrumSchool;UserId=postgres;Password=postgres"));
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<TestService>();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 

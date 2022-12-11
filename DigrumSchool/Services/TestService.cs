@@ -2,6 +2,8 @@
 using DigrumSchool.Dto;
 using DigrumSchool.Models;
 using DigrumSchool.Models.Dto;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace DigrumSchool.Services
 {
@@ -44,17 +46,24 @@ namespace DigrumSchool.Services
             test.Creator = currentUser;
             _context.Tests.Add(test);
             _context.SaveChanges();
-            return test;
+            return FindTestByExpretion(t => t.Id == test.Id) ?? throw new ArgumentNullException();
         }
 
         public List<Test> FindAllTestsByCreator(string username)
         {
-            return _context.Tests.Where(t => t.Creator.Username == username).ToList();
+            return FindTestListByExpretion(t => t.Creator.Username == username);
         }
 
         public Test FindById(int id)
         {
-            return _context.Tests.Where(t => t.Id == id).FirstOrDefault() ?? new Test();
+            return FindTestByExpretion(t => t.Id == id) ?? new Test();
+        }
+
+        public void DeleteById(int id)
+        {
+            Test test = new Test() { Id = id };
+            _context.Entry(test).State = EntityState.Deleted;
+            _context.SaveChanges();
         }
 
         public CompletedTest CompleteTest(CompletedTestDto completedTestDto, User user)     
@@ -67,18 +76,60 @@ namespace DigrumSchool.Services
             test.Score = completedTestDto.Score;
             _context.CompletedTests.Add(test);
             _context.SaveChanges();
-            return test;
+            return FindCompletedTestByExpretion(t => t.Id == test.Id) ?? throw new ArgumentNullException();
         }
 
         public List<CompletedTest> FindCompletedTests(int? id, User user)
         {
             if(id != null)
             {
-                return _context.CompletedTests.Where(t => t.Id == id).ToList();
+                return FindCompletedTestListByExpretion(t => t.Id == id);
             } else
             {
-                return _context.CompletedTests.Where(t => t.User.Id == user.Id).ToList();
+                return FindCompletedTestListByExpretion(t => t.User.Id == user.Id);
             }
+        }
+
+        private Test? FindTestByExpretion(Expression<Func<Test, bool>> expression)
+        {
+            return _context.Tests
+                .Where(expression)
+                .Include(t => t.Language)
+                .Include(t => t.Category)
+                .Include(t => t.Words)
+                .ThenInclude(w => w.Translations)
+                .First();
+        }
+
+        private List<Test> FindTestListByExpretion(Expression<Func<Test, bool>> expression)
+        {
+            return _context.Tests
+                .Where(expression)
+                .Include(t => t.Language)
+                .Include(t => t.Category)
+                .Include(t => t.Words)
+                .ThenInclude(w => w.Translations)
+                .ToList();
+        }
+
+        private CompletedTest? FindCompletedTestByExpretion(Expression<Func<CompletedTest, bool>> expression)
+        {
+            return _context.CompletedTests
+                .Where(expression)
+                .Include(t => t.User)
+                .Include(t => t.Test)
+                .Include(t => t.Course)
+                .First();
+        }
+
+        private List<CompletedTest> FindCompletedTestListByExpretion(Expression<Func<CompletedTest, bool>> expression)
+        {
+            return _context.CompletedTests
+                .Where(expression)
+                .Include(t => t.User)
+                .Include(t => t.Test)
+                .Include(t => t.Course)
+                .ToList();
         }
     }
 }

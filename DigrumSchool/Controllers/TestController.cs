@@ -13,20 +13,26 @@ namespace DigrumSchool.Controllers
     [ApiController]
     public class TestController : Controller
     {
-        private readonly SchoolContext _context;
         private readonly TestService testService;
+        private readonly UserService userService;
 
-        public TestController(SchoolContext schoolContext, TestService testService)
+        public TestController(TestService testService, UserService userService)
         {
-            _context = schoolContext;
             this.testService = testService;
+            this.userService = userService;
+        }
+
+        private User? CheckAuth()
+        {
+            string? userName = HttpContext.Request.Cookies["login"];
+            User? currentUser = userService.FindUserByUsername(userName);
+            return currentUser;
         }
 
         [HttpPost("create")]
         public ActionResult<Test> Create(TestDto testDto)
         {
-            string? userName = HttpContext.Request.Cookies["login"];
-            User? currentUser = _context.Users.Where(u => u.Username == userName).FirstOrDefault();
+            User? currentUser = CheckAuth();
             if (currentUser == null)
             {
                 return Unauthorized();
@@ -37,21 +43,19 @@ namespace DigrumSchool.Controllers
         [HttpGet("creator/{username?}")]
         public ActionResult<List<Test>> FindAllByUser(string? username)
         {
-            string? currentUserName = HttpContext.Request.Cookies["login"];
-            User? currentUser = _context.Users.Where(u => u.Username == currentUserName).FirstOrDefault();
+            User? currentUser = CheckAuth();
             if (currentUser == null)
             {
                 return Unauthorized();
             }
-            username = username == null ? currentUserName : username;
+            username = username == null ? currentUser.Username : username;
             return testService.FindAllTestsByCreator(username);
         }
 
         [HttpGet("{id}")]
         public ActionResult<Test> FindTestById(int id)
         {
-            string? currentUserName = HttpContext.Request.Cookies["login"];
-            User? currentUser = _context.Users.Where(u => u.Username == currentUserName).FirstOrDefault();
+            User? currentUser = CheckAuth();
             if (currentUser == null)
             {
                 return Unauthorized();
@@ -59,11 +63,17 @@ namespace DigrumSchool.Controllers
             return testService.FindById(id);
         }
 
+        [HttpDelete("{id}")]
+        public ActionResult DeleteById(int id)
+        {
+            testService.DeleteById(id);
+            return Ok();
+        }
+
         [HttpPost("complete")]
         public ActionResult<CompletedTest> CompleteTest(CompletedTestDto completedTestDto)
         {
-            string? currentUserName = HttpContext.Request.Cookies["login"];
-            User? currentUser = _context.Users.Where(u => u.Username == currentUserName).FirstOrDefault();
+            User? currentUser = CheckAuth();
             if (currentUser == null)
             {
                 return Unauthorized();
@@ -74,8 +84,7 @@ namespace DigrumSchool.Controllers
         [HttpGet("completed/{id?}")]
         public ActionResult<List<CompletedTest>> FindCompletedTests(int? id)
         {
-            string? currentUserName = HttpContext.Request.Cookies["login"];
-            User? currentUser = _context.Users.Where(u => u.Username == currentUserName).FirstOrDefault();
+            User? currentUser = CheckAuth();
             if (currentUser == null)
             {
                 return Unauthorized();
