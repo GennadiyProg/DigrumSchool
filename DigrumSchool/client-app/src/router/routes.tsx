@@ -7,16 +7,13 @@ import {Courses} from "../pages/Courses";
 import {TestPage} from "../pages/Test";
 import {CreateTest} from "../pages/CreateTest";
 import {UserTests} from "../pages/UserTests";
+import {TestsHistory} from "../pages/TestsHistory";
 
 interface Route {
   path: string,
   component: ReactNode
   routes?: Route[]
 }
-
-export const authRoutes = [
-
-]
 
 export const routes = {
   MainLayout: {
@@ -42,7 +39,11 @@ export const routes = {
       {
         path: paths.MY_TESTS_ROUTE,
         component: <UserTests/>
-      }
+      },
+      {
+        path: paths.HISTORY_ROUTE,
+        component: <TestsHistory/>
+      },
     ] as Route[]
   },
   LoginLayout: {

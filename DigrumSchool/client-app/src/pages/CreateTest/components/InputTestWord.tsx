@@ -2,31 +2,30 @@ import React, {FC, useState} from 'react';
 import {InputTestWordContainer, InputTestWordItem, TranslateWrapper, WordWrapper} from "../CreateTest.styled";
 import {AppInput} from "../../../components/AppInput";
 import {Button} from "@mui/material";
-import {Word} from "../../../utils/types";
+import {WordPrepare} from "../../../utils/types";
 
 interface InputTestWordProps {
-  createWord: (word: Word) => void
+  createWord: (word: WordPrepare) => void
 }
 
 export const InputTestWord:FC<InputTestWordProps> = ({createWord}) => {
   const [word, setWord] = useState('')
-  const [translates, setTranslates] = useState([''])
+  const [translations, setTranslations] = useState([''])
 
   const addTranslate = () => {
-    console.log(translates)
-    setTranslates([...translates, ''])
+    setTranslations([...translations, ''])
   }
 
-  const translatesHandler = (value: string, idx: number) => {
-    setTranslates(translates.map((t, i) => {
+  const translationsHandler = (value: string, idx: number) => {
+    setTranslations(translations.map((t, i) => {
       return i === idx ? value : t
     }))
   }
 
   const prepareWord = () => {
     createWord({
-     title: word,
-     translates,
+      name: word,
+      translations,
     })
   }
 
@@ -42,11 +41,11 @@ export const InputTestWord:FC<InputTestWordProps> = ({createWord}) => {
           />
         </WordWrapper>
 
-        {translates.map((t, i) => (
+        {translations.map((t, i) => (
           <TranslateWrapper key={i}>
             <AppInput id={`i`}
                       label={'Translate'}
-                      handler={(v: string) => translatesHandler(v, i)}
+                      handler={(v: string) => translationsHandler(v, i)}
             />
           </TranslateWrapper>
         ))}

@@ -3,9 +3,10 @@ export const paths = {
   REGISTRATION_ROUTE: '/registration',
   HOME_ROUTE: '/',
   COURSES_ROUTE: '/courses',
-  TEST_ROUTE: '/test',
+  TEST_ROUTE: '/test/:id',
   CREATE_TEST_ROUTE: '/create',
   MY_TESTS_ROUTE: '/my-tests',
+  HISTORY_ROUTE: '/history',
 }
 
 // layouts

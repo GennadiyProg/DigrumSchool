@@ -7,59 +7,59 @@ import {Test} from "../../utils/types";
 import {TestPreStart} from "./components/TestPreStart";
 import {TestFinish} from "./components/TestFinish";
 import {CustomTheme} from "../../themes/BasicTheme";
+import {useParams} from "react-router-dom";
+import {useLoaderFetch} from "../../hooks/useLoaderFetch";
+import {getTestById} from "../../api/Test";
 
 const errorBackground = 'rgba(239,143,143,0.63)'
 const successBackground = 'rgba(109,199,111,0.66)'
-
 const initialTest: Test = {
-  id: '1',
-  title: 'colors',
-  creator: '143',
+  id: 0,
+  title: '',
   isGeneral: false,
-  words: [
-    {
-      id: '1',
-      title: 'red',
-      translates: ['красный', 'рыжий']
-    },
-    {
-      id: '2',
-      title: 'green',
-      translates: ['зеленый']
-    },
-    {
-      id: '3',
-      title: 'yellow',
-      translates: ['желтый']
-    },
-  ]
+  creator: '',
+  language: '',
+  words: [],
 }
 
+
 export const TestPage = () => {
-  const [test, setTest] = useState(initialTest)
+  const [test, setTest] = useState<Test>(initialTest)
   const [index, setIndex] = useState(-1)
   const [isShowAnswer, setIsShowAnswer] = useState(false)
-  const [normalizedTranslates, setNormalizedTranslates] = useState('')
+  const [normalizedTranslations, setNormalizedTranslations] = useState('')
   const [score, setScore] = useState(0)
   const [componentIs, setComponentIs] = useState(<CircularProgress/>)
   const [background, setBackground] = useState('')
   const theme: CustomTheme = useTheme()
+  const params = useParams()
+  const {isLoading, LoaderFetch} = useLoaderFetch(getTestById)
 
   useEffect(() => {
-    setNormalizedTranslates(test.words[index]?.translates.join(' / '))
+    getTest()
+  }, [])
+
+  useEffect(() => {
+    setNormalizedTranslations(getTranslations(index).join(' / '))
 
     if (index < 0 || index >= test.words.length) {
       index < 0
         ? setComponentIs(<TestPreStart start={start}/>)
         : setComponentIs(
-          <TestFinish maxScore={test.words.length} score={score} restart={restart}/>
+          <TestFinish testId={test.id} maxScore={test.words.length} score={score} restart={restart}/>
         )
     }
   }, [index])
 
+  const getTranslations = (index: number): string[] => {
+    if (index < 0 || index > test.words.length - 1) return []
+
+    return test.words[index]?.translations.map(obj => obj.value)
+  }
+
   const next = (_answer: string) => {
-    const isCorrect = test.words[index]?.translates.includes(_answer.toLowerCase())
-    if (isCorrect) {
+    const isCorrect = getTranslations(index).includes(_answer.trim().toLowerCase())
+    if (isCorrect && !isShowAnswer) {
       setScore(score + 1)
     }
 
@@ -84,29 +84,44 @@ export const TestPage = () => {
     setIsShowAnswer(!isShowAnswer)
     setBackground(errorBackground)
   }
+  const getTest = async () => {
+    if (!params.id) return
 
+    const response = await LoaderFetch(params.id)
+    response.json().then((res: Test) => setTest(res))
+
+  }
   return (
     <TestContainer background={background}>
-      <Box sx={{
-        width: '100%',
-      }}>
-        <LinearProgress variant="determinate" color='warning' sx={{height: '6px'}} value={index / test.words.length * 100} />
-      </Box>
-      <TestWrapper>
-        {index < 0 || index > (test.words.length - 1) ? componentIs : (
-          <>
-            {score}
-            <Typography variant='h3' sx={{marginBottom: '10%'}}>{test.words[index].title}</Typography>
-            <Answer next={next}/>
-            <AnswerControls skip={skip} isShowAnswer={isShowAnswer}
-                            toggleShowAnswer={toggleShowAnswer}/>
+      {
+        (isLoading || !test.words)
+          ? <CircularProgress/>
+          : (
+            <>
+              <Box sx={{
+                width: '100%',
+              }}>
+                <LinearProgress variant="determinate" color='warning' sx={{height: '6px'}}
+                                value={index / test.words.length * 100}/>
+              </Box>
+              <TestWrapper>
+                {index < 0 || index > (test.words.length - 1) ? componentIs : (
+                  <>
+                    {score}
+                    <Typography variant='h3' sx={{marginBottom: '10%'}}>{test.words[index].name}</Typography>
+                    <Answer next={next}/>
+                    <AnswerControls skip={skip} isShowAnswer={isShowAnswer}
+                                    toggleShowAnswer={toggleShowAnswer}/>
 
-            <Zoom in={isShowAnswer}>
-              <Typography variant='h5' sx={{marginTop: '10%'}}>{normalizedTranslates}</Typography>
-            </Zoom>
-          </>
-        )}
-      </TestWrapper>
+                    <Zoom in={isShowAnswer}>
+                      <Typography variant='h5' sx={{marginTop: '10%'}}>{normalizedTranslations}</Typography>
+                    </Zoom>
+                  </>
+                )}
+              </TestWrapper>
+            </>
+          )
+      }
     </TestContainer>
   );
 };

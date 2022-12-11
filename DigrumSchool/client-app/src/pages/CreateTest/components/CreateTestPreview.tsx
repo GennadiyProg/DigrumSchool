@@ -11,31 +11,31 @@ import {
   useTheme
 } from '@mui/material';
 import React, {FC, useEffect, useState} from 'react';
-import {Word} from "../../../utils/types";
+import {Word, WordPrepare} from "../../../utils/types";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {CreateTestPreviewContainer} from "../CreateTest.styled";
 
 interface CreateTestPreviewProps {
-  words: Word[]
+  words: WordPrepare[]
 }
 
-const findMaxTranslates = (arr: Word[]) => {
+const findMaxTranslations = (arr: WordPrepare[]) => {
   let max = 0
   arr.forEach(w => {
-    if (w.translates.length > max) {
-      max = w.translates.length
+    if (w.translations.length > max) {
+      max = w.translations.length
     }
   })
   return max
 }
 
 export const CreateTestPreview: FC<CreateTestPreviewProps> = ({words}) => {
-  const [maxTranslates, setMaxTranslates] = useState(0)
+  const [maxTranslations, setMaxTranslations] = useState(0)
   const theme = useTheme()
 
   useEffect(() => {
-    setMaxTranslates(findMaxTranslates(words))
-  }, words)
+    setMaxTranslations(findMaxTranslations(words))
+  }, [words])
 
   return (
     <CreateTestPreviewContainer>
@@ -45,15 +45,15 @@ export const CreateTestPreview: FC<CreateTestPreviewProps> = ({words}) => {
             <TableBody>
               {words.map((word) => (
                 <TableRow
-                  key={word.id}
+                  key={word + word.translations.join('/')}
                   sx={{'&:last-child td, &:last-child th': {border: 0}}}
                 >
                   <TableCell align='center' component="th" scope="row">
-                    {word.title}
+                    {word.name}
                   </TableCell>
-                  {[...Array(maxTranslates)].map((v, i) => (
-                    <TableCell align='center' key={word.translates[i]} component="th" scope="row">
-                      {word.translates[i] || '-'}
+                  {[...Array(maxTranslations)].map((v, i) => (
+                    <TableCell align='center' key={word.translations[i]} component="th" scope="row">
+                      {word.translations[i] || '-'}
                     </TableCell>
                   ))}
                   <TableCell align='center' component="th" scope="row">
