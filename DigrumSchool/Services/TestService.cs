@@ -46,7 +46,7 @@ namespace DigrumSchool.Services
             test.Creator = currentUser;
             _context.Tests.Add(test);
             _context.SaveChanges();
-            return FindTestByExpretion(t => t.Id == test.Id) ?? throw new ArgumentNullException();
+            return test;
         }
 
         public List<Test> FindAllTestsByCreator(string username)
@@ -61,6 +61,8 @@ namespace DigrumSchool.Services
 
         public void DeleteById(int id)
         {
+            List<CompletedTest> completedTests = _context.CompletedTests.Where(t => t.Test != null && t.Test.Id == id).ToList();
+            completedTests.ForEach(t => t.Test = null);
             Test test = new Test() { Id = id };
             _context.Entry(test).State = EntityState.Deleted;
             _context.SaveChanges();

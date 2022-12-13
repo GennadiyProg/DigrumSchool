@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DigrumSchool.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20221211090322_Initial")]
-    partial class Initial
+    [Migration("20221212174255_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -88,7 +88,7 @@ namespace DigrumSchool.Migrations
                     b.Property<int>("Score")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TestId")
+                    b.Property<int?>("TestId")
                         .HasColumnType("integer");
 
                     b.Property<int>("UserId")
@@ -328,10 +328,8 @@ namespace DigrumSchool.Migrations
                         .HasForeignKey("CourseId");
 
                     b.HasOne("DigrumSchool.Models.Test", "Test")
-                        .WithMany("CompletedTests")
-                        .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("TestId");
 
                     b.HasOne("DigrumSchool.Models.User", "User")
                         .WithMany()
@@ -430,11 +428,6 @@ namespace DigrumSchool.Migrations
                         .HasForeignKey("WordsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DigrumSchool.Models.Test", b =>
-                {
-                    b.Navigation("CompletedTests");
                 });
 
             modelBuilder.Entity("DigrumSchool.Models.User", b =>

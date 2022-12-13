@@ -12,8 +12,6 @@ namespace DigrumSchool.Models
         public ICollection<Word> Words { get; set; }
         [JsonIgnore]
         public ICollection<Course>? Courses { get; set; }
-        [JsonIgnore]
-        public ICollection<CompletedTest> CompletedTests { get; set; }
         public bool IsGeneral { get; set; }
     }
 }

@@ -15,12 +15,16 @@ namespace DigrumSchool.Services
             _context = context;
         }
 
-        public User Register(UserDto userDto)
+        public User? Register(UserDto userDto)
         {
+            if(_context.Users.Where(u => u.Username == userDto.UserName).ToList().Count() > 0)
+            {
+                return null;
+            }
             User localUser = new User();
             localUser.Username = userDto.UserName;
             localUser.Password = userDto.Password;
-            Role role = _context.Roles.FirstOrDefault() ?? throw new ArgumentNullException();
+            Role role = _context.Roles.Where(r => r.Name == "User").FirstOrDefault() ?? throw new ArgumentNullException();
             localUser.Role = role;
             _context.Users.Add(localUser);
             _context.SaveChanges();
