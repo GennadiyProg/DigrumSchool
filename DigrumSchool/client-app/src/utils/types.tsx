@@ -25,8 +25,9 @@ export interface Test {
   id: number,
   title: string,
   isGeneral: boolean,
-  creator: string,
-  language: string,
+  creator: { username: string },
+  language: { id: number, name: string },
+  category: { id: number, name: string },
   words: Word[]
 }
 

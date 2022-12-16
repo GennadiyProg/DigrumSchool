@@ -4,6 +4,7 @@ import RoofingOutlinedIcon from '@mui/icons-material/RoofingOutlined';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import DomainAddIcon from '@mui/icons-material/DomainAdd';
 import FlagIcon from '@mui/icons-material/Flag';
 import {Link} from "react-router-dom";
 import {observer} from "mobx-react-lite";
@@ -50,6 +51,11 @@ const menuItems: menuItem[] = [
     icon: <History/>,
     title: "History",
     path: "/history",
+  },
+  {
+    icon: <DomainAddIcon/>,
+    title: "Add course",
+    path: "/create-course",
   },
 ]
 

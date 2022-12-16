@@ -7,6 +7,7 @@ export const paths = {
   CREATE_TEST_ROUTE: '/create',
   MY_TESTS_ROUTE: '/my-tests',
   HISTORY_ROUTE: '/history',
+  CREATE_COURSE_ROUTE: '/create-course',
 }
 
 // layouts

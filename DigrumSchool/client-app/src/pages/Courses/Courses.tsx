@@ -1,5 +1,5 @@
 import React from 'react';
-import {themeStore} from "../stores/ThemeStore";
+import {themeStore} from "../../stores/ThemeStore";
 import {Button} from "@mui/material";
 
 export const Courses = () => {

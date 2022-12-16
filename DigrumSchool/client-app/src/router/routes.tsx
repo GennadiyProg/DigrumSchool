@@ -3,11 +3,12 @@ import {LOGIN_LAYOUT, MAIN_LAYOUT, paths} from "../utils/consts";
 import {Home, Login, Registration} from "../pages";
 import {MainLayout} from "../layouts/MainLayout";
 import {LoginLayout} from "../layouts/LoginLayout";
-import {Courses} from "../pages/Courses";
+import {Courses} from "../pages/Courses/Courses";
 import {TestPage} from "../pages/Test";
 import {CreateTest} from "../pages/CreateTest";
 import {UserTests} from "../pages/UserTests";
 import {TestsHistory} from "../pages/TestsHistory";
+import {CreateCourse} from "../pages/CreateCourse";
 
 interface Route {
   path: string,
@@ -43,6 +44,10 @@ export const routes = {
       {
         path: paths.HISTORY_ROUTE,
         component: <TestsHistory/>
+      },
+      {
+        path: paths.CREATE_COURSE_ROUTE,
+        component: <CreateCourse/>
       },
     ] as Route[]
   },

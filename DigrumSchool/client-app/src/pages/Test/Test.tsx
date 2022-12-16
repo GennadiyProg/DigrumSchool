@@ -17,8 +17,9 @@ const initialTest: Test = {
   id: 0,
   title: '',
   isGeneral: false,
-  creator: '',
-  language: '',
+  creator: {username: ''},
+  language: {id: 0, name: ''},
+  category: {id: 0, name: ''},
   words: [],
 }
 
