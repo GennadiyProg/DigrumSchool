@@ -1,24 +1,27 @@
 import styled from "styled-components";
-import {PaletteColor} from "@mui/material";
-
-interface TestCardWrapperProps {
-  colors: PaletteColor,
-}
 
 interface CancelProps {
   color: string,
   colorHover: string,
 }
 
+interface TestCardWrapperProps {
+  background: string,
+  shadowColor: string,
+}
+
 export const TestCardWrapper = styled.div<TestCardWrapperProps>`
   position: relative;
   display: flex;
   border-radius: 10px;
-  padding: 20px 10px;
+  padding: 20px 60px;
   width: 100%;
-  background: ${({colors}) => colors.main};
-  color: ${({colors}) => colors.contrastText};
-  box-shadow: 0 0 8px rgba(0, 0, 0, .12);
+  box-shadow: 0 0 8px ${({shadowColor}) => shadowColor};
+  justify-content: space-between;
+  background: ${({background}) => background};
+  &:hover {
+    box-shadow: 0 0 20px ${({shadowColor}) => shadowColor};
+  }
 `
 
 export const Cansel = styled.div<CancelProps>`
@@ -32,4 +35,12 @@ export const Cansel = styled.div<CancelProps>`
   &:hover {
     color: ${({colorHover}) => colorHover};
   }
+`
+
+export const AppCardAdditionalInfo = styled.p<{color: string}>`
+  padding: 0;
+  margin: 0;
+  color: ${({color}) => color}
+  display: flex;
+  align-items: center;
 `

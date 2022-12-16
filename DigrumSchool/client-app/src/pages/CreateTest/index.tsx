@@ -13,6 +13,7 @@ import {testCreate} from "../../api/Test"
 import {SelectControl} from "./CreateTest.types";
 import {AppInput} from "../../components/AppInput";
 import {useAlert} from "../../hooks/useAlert";
+import {categories, languages} from "../../utils/consts";
 
 export const CreateTest = () => {
   const [words, setWords] = useState<WordPrepare[]>([])
@@ -35,14 +36,14 @@ export const CreateTest = () => {
       label: 'Category',
       value: category,
       onChange: handleCategory,
-      MenuItems: ['Colors', 'Base', 'Home', 'Games', 'Other', 'TestCategory'],
+      MenuItems: categories,
       helperText: 'Выберите категорию',
     },
     {
       label: 'Language',
       value: language,
       onChange: handleLanguage,
-      MenuItems: ['English', 'Germany', 'French', 'Italy', 'Spain'],
+      MenuItems: languages,
       helperText: 'Выберите язык',
     },
   ]
@@ -99,7 +100,7 @@ export const CreateTest = () => {
           justifyContent: 'end',
           margin: '20px 0',
         }}>
-          <Button onClick={create}>Создать тест</Button>
+          <Button variant="contained" color="success" onClick={create}>Создать тест</Button>
         </Box>
       </Box>
     </CreateTestContainer>

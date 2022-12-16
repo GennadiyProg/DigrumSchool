@@ -41,7 +41,11 @@ export interface User {
 }
 
 export interface Course {
-
+  id: number,
+  creator: {username: string},
+  participants: User[],
+  tests: Test[],
+  groupName: string,
 }
 
 export enum Languages {
