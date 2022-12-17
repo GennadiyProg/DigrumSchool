@@ -22,7 +22,7 @@ namespace DigrumSchool.Services
         {
             Course course = new Course();
             course.Creator = creator;
-            course.GroupName = courseDto.Name;
+            course.GroupName = courseDto.GroupName;
             course.Participants = _context.Users.Where(u => courseDto.Participants.Contains(u.Username)).ToList();
             course.Tests = _context.Tests.Where(t => courseDto.Tests.Contains(t.Id)).ToList();
             _context.Courses.Add(course);
