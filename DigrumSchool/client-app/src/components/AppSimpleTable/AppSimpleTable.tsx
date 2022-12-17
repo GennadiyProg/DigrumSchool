@@ -73,7 +73,7 @@ export const AppSimpleTable: FC<AppSimpleTableProps> = ({
                       <TableCell key={index}>{v}</TableCell>
                     ))}
                   {deletable && (
-                    <TableCell>
+                    <TableCell align="right">
                       <Tooltip title="Delete">
                         <IconButton onClick={() => deleteHandler && deleteHandler(obj)}>
                           <DeleteIcon/>

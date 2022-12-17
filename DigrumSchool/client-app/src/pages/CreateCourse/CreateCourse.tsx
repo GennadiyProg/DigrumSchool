@@ -5,9 +5,11 @@ import {AppSearch} from "../../components/AppSearch";
 import {AppSimpleTable} from "../../components/AppSimpleTable";
 import {useLoaderFetch} from "../../hooks/useLoaderFetch";
 import {getAllByUser, getTestById} from "../../api/Test";
-import {Test} from "../../utils/types";
-import {Typography} from "@mui/material";
+import {Test, User} from "../../utils/types";
+import {Alert, Button, CircularProgress, Typography, Zoom} from "@mui/material";
 import {getUserByUsername} from "../../api/User";
+import {createCourse} from "../../api/Course";
+import {useAlert} from "../../hooks/useAlert";
 
 interface SuggestedTest {
   id: number,
@@ -15,11 +17,9 @@ interface SuggestedTest {
   language: string,
   title: string
 }
-
 interface AddedUser {
-  username: ''
+  username: string,
 }
-
 const initialTest: SuggestedTest = {
   id: 0,
   title: '',
@@ -35,11 +35,12 @@ export const CreateCourse = () => {
   const [addedTests, setAddedTests] = useState<SuggestedTest[]>([])
   const {isLoading, LoaderFetch} = useLoaderFetch(getAllByUser)
   const {isLoading: isUserLoading, LoaderFetch: getUser} = useLoaderFetch(getUserByUsername)
+  const {isLoading: isLoadingCourseCreate, LoaderFetch: reqCreateCourse} = useLoaderFetch(createCourse)
+  const {alertData, setAlertData} = useAlert()
 
   useEffect(() => {
     getTests()
   }, [])
-
   const getTests = async () => {
     const response = await LoaderFetch()
     if (!response.ok) {
@@ -56,37 +57,48 @@ export const CreateCourse = () => {
     })
     setAllTests(suggestedTests)
   }
-
   const addStudent = async (username: string) => {
     const response = await getUser(username)
     if (!response.ok) {
       return
     }
-    const user: AddedUser = await response.json().then((v: AddedUser) => v)
-    students.filter(st => st.username !== username) && setStudents([...students, user])
+    const user: AddedUser = await response.json().then((v: User) => ({username: v.username}))
+    !students.find(st => st.username === username) && setStudents([...students, user])
   }
-
   const removeStudent = (student: AddedUser) => {
     setStudents([...students.filter(st => st.username !== student.username)])
   }
-
   const removeTest = (test: SuggestedTest) => {
     setAddedTests([...addedTests.filter(t => t.id !== test.id)])
   }
-
   const addTest = (test: SuggestedTest) => {
     setAddedTests([...addedTests, test])
     setSuggestedTests([...suggestedTests.filter(t => t.id !== test.id)])
   }
-
   const updateSuggestedTests = (searchName: string) => {
     const newTests = allTests.filter(test => test.title.includes(searchName) && !addedTests.includes(test))
     setSuggestedTests(newTests)
   }
 
+  const courseCreate = async () => {
+    const response = await reqCreateCourse({
+      name: groupName,
+      tests: addedTests.map(test => test.id),
+      participants: students.map(st => st.username)
+    })
+    if (!response.ok) {
+      setAlertData({type: 'error', isShow: true, message: 'Простите, курс не был создан, попробуйте позднее :('})
+      return
+    }
+    setAlertData({type: 'success', isShow: true, message: 'Курс успешно создан'})
+  }
+
   return (
     <CreateCourseContainer>
       <Typography variant="h3" sx={{margin: '15px 0'}}>Создание курса</Typography>
+      <Zoom in={alertData.isShow}>
+        <Alert color={alertData.type}>{alertData.message}</Alert>
+      </Zoom>
       <AppInput id="groupName" label="group name" handler={(v: string) => setGroupName(v)}/>
       <HalfPart>
         <HalfPartItem>
@@ -100,6 +112,12 @@ export const CreateCourse = () => {
           <AppSimpleTable deleteHandler={removeTest} deletable={true} data={addedTests}/>
         </HalfPartItem>
       </HalfPart>
+      <Zoom in={isLoadingCourseCreate}>
+        <CircularProgress/>
+      </Zoom>
+      <Zoom in={!isLoadingCourseCreate}>
+        <Button onClick={courseCreate} variant="contained" color="success">Создать курс</Button>
+      </Zoom>
     </CreateCourseContainer>
   );
 };

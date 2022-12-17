@@ -33,8 +33,6 @@ export interface Test {
 
 export interface User {
   id: number,
-  courses: Course[],
-  createdCourses: Course[],
   languages: Languages[],
   role: Role[],
   username: string,

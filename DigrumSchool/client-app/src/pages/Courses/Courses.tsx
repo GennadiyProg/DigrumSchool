@@ -9,21 +9,21 @@ const initialState: Course[] = [
     id: 1,
     creator: {username: 'denis'},
     groupName: 'PRI-120',
-    participants: [{id: 1, username: 'user-1', courses: [], createdCourses: [], role: [], languages: []}],
+    participants: [{id: 1, username: 'user-1', role: [], languages: []}],
     tests: []
   },
   {
     id: 2,
     creator: {username: 'denis'},
     groupName: 'PRI-120',
-    participants: [{id: 1, username: 'user-1', courses: [], createdCourses: [], role: [], languages: []}],
+    participants: [{id: 1, username: 'user-1', role: [], languages: []}],
     tests: []
   },
   {
     id: 3,
     creator: {username: 'denis'},
     groupName: 'PRI-120',
-    participants: [{id: 1, username: 'user-1', courses: [], createdCourses: [], role: [], languages: []}],
+    participants: [{id: 1, username: 'user-1', role: [], languages: []}],
     tests: []
   },
 ]
