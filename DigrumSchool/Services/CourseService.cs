@@ -1,5 +1,6 @@
 ﻿using DigrumSchool.Config;
 using DigrumSchool.Models;
+using DigrumSchool.Models.Dto;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -17,21 +18,23 @@ namespace DigrumSchool.Services
             this.testService = testService;
         }
 
-        public Course Create(User creator, string groupName)
+        public Course Create(User creator, CourseDto courseDto)
         {
             Course course = new Course();
             course.Creator = creator;
-            course.GroupName = groupName;
+            course.GroupName = courseDto.Name;
+            course.Participants = _context.Users.Where(u => courseDto.Participants.Contains(u.Username)).ToList();
+            course.Tests = _context.Tests.Where(t => courseDto.Tests.Contains(t.Id)).ToList();
             _context.Courses.Add(course);
             _context.SaveChanges();
             return FindCourseByExpretion(c => c.Id == course.Id) ?? throw new ArgumentNullException();
         }
 
-        public Course? AddParticipant(int courseId, string username)
+        public Course? AddParticipants(CourseParticipantsDto courseParticipants)
         {
-            Course? course = _context.Courses.Where(c => c.Id == courseId).FirstOrDefault();
-            User? participant = _context.Users.Where(u => u.Username == username).FirstOrDefault();
-            if (course == null || participant == null)
+            Course? course = _context.Courses.Where(c => c.Id == courseParticipants.CourseId).FirstOrDefault();
+            List<User> participants = _context.Users.Where(u => courseParticipants.Participants.Contains(u.Username)).ToList();
+            if (course == null)
             {
                 return null;
             }
@@ -39,16 +42,16 @@ namespace DigrumSchool.Services
             {
                 course.Participants = new List<User>();
             }
-            course.Participants.Add(participant);
+            participants.ForEach(p => course.Participants.Add(p));
             _context.SaveChanges();
-            return course;
+            return FindCourseByExpretion(c => c.Id == course.Id);
         }
 
-        public Course? AddTest(int courseId, int testId)
+        public Course? AddTests(CourseTestsDto courseTests)
         {
-            Course? course = _context.Courses.Where(c => c.Id == courseId).FirstOrDefault();
-            Test? test = _context.Tests.Where(t => t.Id == testId).FirstOrDefault();
-            if (course == null || test == null)
+            Course? course = _context.Courses.Where(c => c.Id == courseTests.CourseId).FirstOrDefault();
+            List<Test> foundedTests = _context.Tests.Where(t => courseTests.Tests.Contains(t.Id)).ToList();
+            if (course == null)
             {
                 return null;
             }
@@ -56,9 +59,9 @@ namespace DigrumSchool.Services
             {
                 course.Tests = new List<Test>();
             }
-            course.Tests.Add(test);
+            foundedTests.ForEach(t => course.Tests.Add(t));
             _context.SaveChanges();
-            return course;
+            return FindCourseByExpretion(c => c.Id == course.Id);
         }
 
         public Course FindById(int courseId)

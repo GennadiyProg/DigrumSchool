@@ -9,7 +9,7 @@
     <SpaRoot>client-app\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     <SpaProxyServerUrl>http://localhost:3000</SpaProxyServerUrl>
-    <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
+    <!--<SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>-->
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
