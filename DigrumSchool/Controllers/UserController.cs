@@ -59,7 +59,7 @@ namespace DigrumSchool.Controllers
             return currentUser;
         }
 
-        [HttpGet("username")]
+        [HttpGet("{username}")]
         public ActionResult<User> FindByUsername(string username)
         {
             User? currentUser = CheckAuth();

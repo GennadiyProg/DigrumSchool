@@ -124,7 +124,7 @@ namespace DigrumSchool.Services
                 .First();
         }
 
-        private List<CompletedTest> FindCompletedTestListByExpretion(Expression<Func<CompletedTest, bool>> expression)
+        public List<CompletedTest> FindCompletedTestListByExpretion(Expression<Func<CompletedTest, bool>> expression)
         {
             return _context.CompletedTests
                 .Where(expression)

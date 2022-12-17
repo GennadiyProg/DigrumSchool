@@ -83,5 +83,40 @@ namespace DigrumSchool.Controllers
             }
             return courseService.FindAllByCreator(username == null ? currentUser.Username : username);
         }
+
+        [HttpGet("completedtests/{courseId}/{userId?}")]
+        public ActionResult<List<CompletedTest>> FindAllCompletedTestsByCourse(int courseId, int? userId)
+        {
+            User? currentUser = CheckAuth();
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+            return courseService.FindAllCompletedTestsByCourse(courseId, userId == null ? currentUser.Id : userId);
+        }
+
+        [HttpPost("deleteparticipant/{courseId}/{userId}")]
+        public IActionResult DeleteParticipant(int courseId, int UserId)
+        {
+            User? currentUser = CheckAuth();
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+            courseService.DeleteParticipant(courseId, UserId);
+            return Ok();
+        }
+
+        [HttpPost("deletetest/{courseId}/{testId}")]
+        public IActionResult DeleteTest(int courseId, int testId)
+        {
+            User? currentUser = CheckAuth();
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+            courseService.DeleteTest(courseId, testId);
+            return Ok();
+        }
     }
 }
