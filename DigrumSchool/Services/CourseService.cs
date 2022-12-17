@@ -79,14 +79,14 @@ namespace DigrumSchool.Services
 
         public void DeleteParticipant(int courseId, int userId)
         {
-            Course course = _context.Courses.Where(c => c.Id == courseId).First();
+            Course course = FindCourseByExpretion(c => c.Id == courseId);
             course.Participants.Remove(_context.Users.Where(u => u.Id == userId).First());
             _context.SaveChanges();
         }
 
         public void DeleteTest(int courseId, int testId)
         {
-            Course course = _context.Courses.Where(c => c.Id == courseId).First();
+            Course course = FindCourseByExpretion(c => c.Id == courseId);
             course.Tests.Remove(_context.Tests.Where(t => t.Id == testId).First());
             _context.SaveChanges();
         }
