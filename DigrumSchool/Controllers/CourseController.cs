@@ -1,4 +1,5 @@
 ﻿using DigrumSchool.Models;
+using DigrumSchool.Models.Dto;
 using DigrumSchool.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,39 +26,39 @@ namespace DigrumSchool.Controllers
             return currentUser;
         }
 
-        [HttpPost("create/{groupName}")]
-        public ActionResult<Course> Create(string groupName)
+        [HttpPost("create")]
+        public ActionResult<Course> Create(CourseDto courseDto)
         {
             User? currentUser = CheckAuth();
             if (currentUser == null)
             {
                 return Unauthorized();
             }
-            return courseService.Create(currentUser, groupName);
+            return courseService.Create(currentUser, courseDto);
         }
 
-        [HttpPost("addparticipant/{courseId}/{username}")]
-        public ActionResult<Course> AddParticipant(int courseId, string username)
+        [HttpPost("addparticipant")]
+        public ActionResult<Course> AddParticipants(CourseParticipantsDto courseParticipants)
         {
             User? currentUser = CheckAuth();
             if (currentUser == null)
             {
                 return Unauthorized();
             }
-            Course? course = courseService.AddParticipant(courseId, username);
+            Course? course = courseService.AddParticipants(courseParticipants);
             if (course == null) return Ok("Course or test not found");
             return course;
         }
 
-        [HttpPost("addtest/{courseId}/{testId}")]
-        public ActionResult<Course> AddParticipant(int courseId, int testId)
+        [HttpPost("addtest")]
+        public ActionResult<Course> AddTests(CourseTestsDto courseTests)
         {
             User? currentUser = CheckAuth();
             if (currentUser == null)
             {
                 return Unauthorized();
             }
-            Course? course = courseService.AddTest(courseId, testId);
+            Course? course = courseService.AddTests(courseTests);
             if (course == null) return Ok("Course or test not found");
             return course;
         }
