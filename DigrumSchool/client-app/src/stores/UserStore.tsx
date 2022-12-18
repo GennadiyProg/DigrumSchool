@@ -8,7 +8,7 @@ class UserStore {
     makeAutoObservable(this)
   }
 
-  setUser(user: User) {
+  setUser(user: User | null) {
     this.user = user
   }
 }

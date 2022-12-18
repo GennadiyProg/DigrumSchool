@@ -10,6 +10,7 @@ import {Link} from "react-router-dom";
 import {observer} from "mobx-react-lite";
 import {MainMenuStyled} from "./MainMenu.styled";
 import {History} from "@mui/icons-material";
+import {userStore} from "../../stores/UserStore";
 
 interface MainMenuProps {
   isOpen: boolean,
@@ -52,6 +53,7 @@ const menuItems: menuItem[] = [
     title: "История",
     path: "/history",
   },
+  // document.cookie.split(';').find(el => (el.split('=')[0] === 'login' && el.split('=')[1]))
   {
     icon: <LogoutOutlinedIcon/>,
     title: "Выход",
@@ -64,6 +66,7 @@ export const MainMenu: FC<MainMenuProps> = observer(({isOpen}) => {
 
   const unsetCookie = () => {
     document.cookie = 'login=';
+    userStore.setUser(null)
   }
 
   return (
@@ -86,7 +89,7 @@ export const MainMenu: FC<MainMenuProps> = observer(({isOpen}) => {
                 minWidth: '50px',
                 color: '#fff',
               }}>{item.icon}</ListItemIcon>
-              {isOpen && <ListItemText>{item.title}</ListItemText>}
+              {isOpen && <ListItemText>{item.path === '/login' ? (userStore.user ? "Выход" : "Вход") : item.title}</ListItemText>}
             </ListItemButton>
           </Link>
         ))}

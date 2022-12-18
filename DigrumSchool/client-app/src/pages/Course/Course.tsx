@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {CourseContainer, CourseContent, SideMenuContainer, TestContainer} from "./Course.styled";
 import {CircularProgress, Typography} from "@mui/material";
 import {useLoaderFetch} from "../../hooks/useLoaderFetch";
-import {getCourseById, getUserCompletedTestsByCourse} from "../../api/Course";
+import {getCourseById, getLeaderboard, getUserCompletedTestsByCourse} from "../../api/Course";
 import {useParams} from "react-router-dom";
 import {TestsList} from "./components/TestsList";
 import {CompletedTest, Course, Test} from "../../utils/types";
@@ -20,11 +20,17 @@ const initialCourse: Course = {
   id: 0
 }
 
+interface Leaderboard {
+
+}
+
 const AppCourseComponent = () => {
   const {isLoading, LoaderFetch: fetchCourse} = useLoaderFetch(getCourseById)
+  const {isLoading: isLoadingLeaderboard, LoaderFetch: fetchLeaderboard} = useLoaderFetch(getLeaderboard)
   const {isLoading: isLoadingCompletedTests, LoaderFetch: fetchCompletedTests} = useLoaderFetch(getUserCompletedTestsByCourse)
   const [course, setCourse] = useState<Course>(initialCourse)
   const [allCompletedTests, setAllCompletedTests] = useState<CompletedTest[]>([])
+  const [leaderboard, setLeaderboard] = useState([])
   const params = useParams()
   const isCreator = useMemo(() => {
     return userStore.user?.username === course.creator.username
@@ -54,6 +60,15 @@ const AppCourseComponent = () => {
       setAllCompletedTests(data)
     }
   }
+  const getCourseLeaderboard = async () => {
+    if (params.id) {
+      const response = await fetchLeaderboard(Number(params.id))
+      if (!response.ok) return
+      
+      const data = await response.json()
+      setLeaderboard(data)
+    }
+  }
   const menuItems: CourseMenuItem[] = [
     {
       title: 'Участники',
@@ -67,7 +82,11 @@ const AppCourseComponent = () => {
         score: test.score,
         date: new Date(test.date).toLocaleDateString()
       }))
-    }
+    },
+    {
+      title: 'Таблица лидеров',
+      content: [],
+    },
   ]
 
   return (

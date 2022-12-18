@@ -21,3 +21,7 @@ export const getCourseById = async (id: number) => {
 export const getUserCompletedTestsByCourse = async (courseId: number, userId?: number) => {
   return await fetch(`/course/completedtests/${courseId}/${userId || ''}`)
 }
+
+export const getLeaderboard = async (courseId: number) => {
+  return await fetch(`course/leaderboard/${courseId}`)
+}
