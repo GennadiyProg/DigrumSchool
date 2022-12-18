@@ -4,11 +4,13 @@ import {AppCard} from "../../components/AppCard";
 import {Pagination} from "@mui/lab";
 import {HomeContainer} from "./Home.styled";
 import {Grid, useMediaQuery, useTheme} from "@mui/material";
+import {useNavigate} from "react-router-dom";
 
 export const Home = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [page, setPage] = useState(1)
   const [amountOnPage, setAmountOnPage] = useState(0)
+  const navigate = useNavigate()
 
   const onResizeEvent = (e?: Event) => {
     const isDesktop = window.innerWidth >= 900
@@ -48,13 +50,17 @@ export const Home = () => {
     setPage(page)
   }
 
+  const redirectToCategory = (category: string) => {
+    navigate(`/category/${category}`)
+  }
+
   return (
     <HomeContainer>
 
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 12, sm: 12, md: 12 }}>
         {categories.slice(start, end).map((c) => (
           <Grid item xs={6} sm={4} md={3} key={c}>
-            <AppCard category padding='small'>
+            <AppCard onClick={() => redirectToCategory(c)} category padding='small'>
               {c}
             </AppCard>
           </Grid>

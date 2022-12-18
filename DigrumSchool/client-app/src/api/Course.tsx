@@ -23,5 +23,13 @@ export const getUserCompletedTestsByCourse = async (courseId: number, userId?: n
 }
 
 export const getLeaderboard = async (courseId: number) => {
-  return await fetch(`course/leaderboard/${courseId}`)
+  return await fetch(`/course/leaderboard/${courseId}`)
+}
+
+export const getCoursesByCreator = async (creatorUsername?: string) => {
+  return await fetch(`/course/creator/${creatorUsername || ''}`)
+}
+
+export const getCoursesByParticipant = async (username?: string) => {
+  return await fetch(`/course/participant/${username || ''}`)
 }

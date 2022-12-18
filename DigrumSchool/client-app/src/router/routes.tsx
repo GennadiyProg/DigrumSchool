@@ -12,6 +12,8 @@ import {AppCourse} from "../pages/Course";
 import {Home} from "../pages/Home";
 import {Login} from "../pages/Login";
 import {Registration} from "../pages/Registration";
+import {CategoryTests} from "../pages/CategoryTests";
+import {ProtectedRoute} from "../hocks/ProtectedRoute";
 
 interface Route {
   path: string,
@@ -30,7 +32,7 @@ export const routes = {
       },
       {
         path: paths.COURSES_ROUTE,
-        component: <Courses />
+        component: <ProtectedRoute><Courses /></ProtectedRoute>
       },
       {
         path: paths.TEST_ROUTE,
@@ -38,11 +40,11 @@ export const routes = {
       },
       {
         path: paths.CREATE_TEST_ROUTE,
-        component: <CreateTest />
+        component: <ProtectedRoute><CreateTest /></ProtectedRoute>
       },
       {
         path: paths.MY_TESTS_ROUTE,
-        component: <UserTests/>
+        component: <ProtectedRoute><UserTests/></ProtectedRoute>
       },
       {
         path: paths.HISTORY_ROUTE,
@@ -50,11 +52,15 @@ export const routes = {
       },
       {
         path: paths.CREATE_COURSE_ROUTE,
-        component: <CreateCourse/>
+        component: <ProtectedRoute><CreateCourse/></ProtectedRoute>
       },
       {
         path: paths.COURSE_ROUTE,
-        component: <AppCourse/>
+        component: <ProtectedRoute><AppCourse/></ProtectedRoute>
+      },
+      {
+        path: paths.CATEGORY_ROUTE,
+        component: <CategoryTests/>
       },
     ] as Route[]
   },

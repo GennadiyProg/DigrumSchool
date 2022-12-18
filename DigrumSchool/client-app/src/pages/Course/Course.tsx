@@ -21,8 +21,16 @@ const initialCourse: Course = {
 }
 
 interface Leaderboard {
-
+  id?: string,
+  user: string,
+  score: number,
 }
+
+const initialLeaderboard = [{
+  id: '',
+  user: '',
+  score: 0
+}]
 
 const AppCourseComponent = () => {
   const {isLoading, LoaderFetch: fetchCourse} = useLoaderFetch(getCourseById)
@@ -30,7 +38,7 @@ const AppCourseComponent = () => {
   const {isLoading: isLoadingCompletedTests, LoaderFetch: fetchCompletedTests} = useLoaderFetch(getUserCompletedTestsByCourse)
   const [course, setCourse] = useState<Course>(initialCourse)
   const [allCompletedTests, setAllCompletedTests] = useState<CompletedTest[]>([])
-  const [leaderboard, setLeaderboard] = useState([])
+  const [leaderboard, setLeaderboard] = useState<Leaderboard[]>(initialLeaderboard)
   const params = useParams()
   const isCreator = useMemo(() => {
     return userStore.user?.username === course.creator.username
@@ -39,6 +47,7 @@ const AppCourseComponent = () => {
   useEffect(() => {
     getTests()
     getCompletedTests()
+    getCourseLeaderboard()
   }, [])
   const getTests = async () => {
     if (params.id) {
@@ -85,7 +94,7 @@ const AppCourseComponent = () => {
     },
     {
       title: 'Таблица лидеров',
-      content: [],
+      content: leaderboard.map(el => ({...el, id: el.user})),
     },
   ]
 

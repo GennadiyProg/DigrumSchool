@@ -26,4 +26,5 @@ export const AppSearchBody = styled.div<AppSearchBodyProps>`
   border: 2px solid ${({borderColor}) => borderColor};
   border-radius: 4px;
   border-top: none;
+  z-index: 10;
 `

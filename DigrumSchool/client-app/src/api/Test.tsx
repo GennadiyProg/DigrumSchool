@@ -49,6 +49,5 @@ export const deleteTestById = async (id: number) => {
   })
 }
 export const getGlobalTestsByCategory = async (category: string) => {
-  // Todo: Дописать апишку
-  return await fetch('/')
+  return await fetch(`/test/general/${category}`)
 }

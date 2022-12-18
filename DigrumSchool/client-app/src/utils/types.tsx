@@ -34,7 +34,7 @@ export interface Test {
 export interface User {
   id: number,
   languages: Languages[],
-  role: Role[],
+  role: Role,
   username: string,
 }
 
