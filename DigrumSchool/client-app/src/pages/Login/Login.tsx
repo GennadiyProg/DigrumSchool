@@ -72,7 +72,7 @@ export const Login = () => {
 
     const data = await response.json().then((v: User) => v)
     userStore.setUser(data)
-
+    console.log(data)
     setStatus(AuthStatus.success)
     setTimeout(() => {
       navigate('/')

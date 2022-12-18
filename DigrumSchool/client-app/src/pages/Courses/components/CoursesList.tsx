@@ -9,7 +9,7 @@ import {useNavigate, useNavigation} from "react-router-dom";
 
 interface CoursesListProps {
   courses: Course[],
-  removeCourse: (id: number) => void
+  removeCourse?: (id: number) => void
 }
 
 export const CoursesList:FC<CoursesListProps> = ({courses, removeCourse}) => {
@@ -23,7 +23,7 @@ export const CoursesList:FC<CoursesListProps> = ({courses, removeCourse}) => {
   return (
     <CoursesListWrapper>
       {courses.map((course) => (
-        <AppCard key={course.id} handleCancel={() => removeCourse(course.id)}>
+        <AppCard canceled={!!removeCourse} key={course.id} handleCancel={() => removeCourse && removeCourse(course.id)}>
           <Typography variant="h6">{course.groupName}</Typography>
           <AppCardAdditionalInfo color={theme.customPalette.appCard.additionalText}>
             Участников: {course.participants.length}

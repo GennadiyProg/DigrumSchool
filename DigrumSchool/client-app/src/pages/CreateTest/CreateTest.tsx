@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Alert, Box, Button, SelectChangeEvent, Typography, Zoom} from "@mui/material";
+import {Alert, Box, Button, FormControlLabel, SelectChangeEvent, Switch, Typography, Zoom} from "@mui/material";
 import {CreateTestHeader} from "./components/CreateTestHeader";
 import {InputTestWord} from "./components/InputTestWord";
 import {
@@ -15,8 +15,10 @@ import {AppInput} from "../../components/AppInput";
 import {useAlert} from "../../hooks/useAlert";
 import {categories, languages} from "../../utils/consts";
 import {PageHeader} from "../../components/PageHeader";
+import {userStore} from "../../stores/UserStore";
+import {observer} from "mobx-react-lite";
 
-export const CreateTest = () => {
+const CreateTestComponent = () => {
   const [words, setWords] = useState<WordPrepare[]>([])
   const {isLoading, LoaderFetch} = useLoaderFetch(testCreate)
   const [category, setCategory] = useState('')
@@ -24,6 +26,7 @@ export const CreateTest = () => {
   const [title, setTitle] = useState('')
   const [word, setWord] = useState('')
   const [translations, setTranslations] = useState([''])
+  const [isGeneral, setIsGeneral] = useState(false)
   const {alertData, setAlertData} = useAlert()
 
   const handleCategory = (e: SelectChangeEvent) => {
@@ -53,6 +56,8 @@ export const CreateTest = () => {
 
   const createWord = (word: WordPrepare) => {
     setWords([...words, word])
+    setWord('')
+    setTranslations([''])
   }
 
   const create = async () => {
@@ -61,7 +66,7 @@ export const CreateTest = () => {
       Category: category,
       Language: language,
       Words: words,
-      IsGeneral: false,
+      IsGeneral: isGeneral,
     })
     if (!response.ok) {
       setAlertData({
@@ -82,6 +87,7 @@ export const CreateTest = () => {
     setWords([])
     setWord('')
     setTranslations([])
+    setIsGeneral(false)
     setTimeout(() => {
       setAlertData({...alertData, isShow: false})
     }, 2000)
@@ -100,6 +106,12 @@ export const CreateTest = () => {
           </Zoom>
         )}
         <CreateTestHeader SelectControls={selects}>
+          {userStore.user && userStore.user.role.name === 'Admin' &&
+              <FormControlLabel sx={{marginLeft: '10px'}} control={
+                <Switch value={isGeneral} onChange={(e) => setIsGeneral(e.target.checked)} />
+              } label="Сделать глобальным?"
+              />
+          }
           <AppInput
             id='title'
             label='title'
@@ -130,3 +142,5 @@ export const CreateTest = () => {
     </CreateTestContainer>
   );
 };
+
+export const CreateTest = observer(CreateTestComponent)

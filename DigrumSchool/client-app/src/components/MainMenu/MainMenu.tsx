@@ -10,6 +10,8 @@ import {Link} from "react-router-dom";
 import {observer} from "mobx-react-lite";
 import {MainMenuStyled} from "./MainMenu.styled";
 import {History} from "@mui/icons-material";
+import {userStore} from "../../stores/UserStore";
+import {useAuth} from "../../hooks/useAuth";
 
 interface MainMenuProps {
   isOpen: boolean,
@@ -19,51 +21,62 @@ interface menuItem {
   icon: ReactNode,
   title: string,
   path: string,
+  protected: boolean,
 }
 
 const menuItems: menuItem[] = [
   {
     icon: <RoofingOutlinedIcon/>,
     title: "Главная",
-    path: "/"
+    path: "/",
+    protected: false,
   },
   {
     icon: <AddCircleOutlineIcon/>,
     title: "Создать тест",
     path: "/create",
+    protected: true,
   },
   {
     icon: <FlagIcon/>,
     title: "Мои тесты",
     path: "/my-tests",
+    protected: true,
   },
   {
     icon: <SchoolOutlinedIcon/>,
     title: "Курсы",
-    path: "/courses"
+    path: "/courses",
+    protected: true,
   },
   {
     icon: <DomainAddIcon/>,
     title: "Создать курс",
     path: "/create-course",
+    protected: true,
   },
   {
     icon: <History/>,
     title: "История",
     path: "/history",
+    protected: false,
   },
   {
     icon: <LogoutOutlinedIcon/>,
     title: "Выход",
-    path: "/login"
+    path: "/login",
+    protected: false,
+
   },
 ]
 
 export const MainMenu: FC<MainMenuProps> = observer(({isOpen}) => {
   const theme = useTheme()
+  const isAuth = useAuth()
 
   const unsetCookie = () => {
     document.cookie = 'login=';
+    userStore.setUser(null)
   }
 
   return (
@@ -72,6 +85,7 @@ export const MainMenu: FC<MainMenuProps> = observer(({isOpen}) => {
         {menuItems.map(item => (
           <Link style={{
                   textDecoration: 'none',
+                  pointerEvents: item.protected && !isAuth ? 'none' : 'auto'
                 }}
                 key={item.title}
                 to={item.path}
@@ -81,12 +95,12 @@ export const MainMenu: FC<MainMenuProps> = observer(({isOpen}) => {
               minHeight: '48px',
               textDecoration: 'none',
               color: '#fff'
-            }}>
+            }} disabled={item.protected && !isAuth}>
               <ListItemIcon sx={{
                 minWidth: '50px',
                 color: '#fff',
               }}>{item.icon}</ListItemIcon>
-              {isOpen && <ListItemText>{item.title}</ListItemText>}
+              {isOpen && <ListItemText>{item.path === '/login' ? (userStore.user ? "Выход" : "Вход") : item.title}</ListItemText>}
             </ListItemButton>
           </Link>
         ))}

@@ -10,13 +10,15 @@ interface TestCardProps {
   canceled?: boolean,
   padding?: 'none' | 'small' | 'large',
   category?: boolean,
+  onClick?: Function
 }
 
 export const AppCard:FC<TestCardProps> = ({handleCancel,
                                             children,
                                             canceled= true,
                                             padding = 'large',
-                                            category = false
+                                            category = false,
+                                            onClick,
 }) => {
   const theme: CustomTheme = useTheme()
   const cancelColor = {
@@ -30,7 +32,7 @@ export const AppCard:FC<TestCardProps> = ({handleCancel,
     category,
   }
   return (
-    <AppCardWrapper {...TestCardWrapperColor}>
+    <AppCardWrapper onClick={() => onClick && onClick()} {...TestCardWrapperColor}>
       {canceled && !category && (
         <Cansel onClick={handleCancel} {...cancelColor}>
           <CancelIcon sx={{
