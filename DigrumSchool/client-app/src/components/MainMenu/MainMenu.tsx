@@ -24,51 +24,59 @@ interface menuItem {
 const menuItems: menuItem[] = [
   {
     icon: <RoofingOutlinedIcon/>,
-    title: "Home",
+    title: "Главная",
     path: "/"
   },
   {
-    icon: <SchoolOutlinedIcon/>,
-    title: "Cousres",
-    path: "/courses"
-  },
-  {
-    icon: <LogoutOutlinedIcon/>,
-    title: "Logout",
-    path: "/login"
-  },
-  {
     icon: <AddCircleOutlineIcon/>,
-    title: "Create test",
+    title: "Создать тест",
     path: "/create",
   },
   {
     icon: <FlagIcon/>,
-    title: "My tests",
+    title: "Мои тесты",
     path: "/my-tests",
   },
   {
-    icon: <History/>,
-    title: "History",
-    path: "/history",
+    icon: <SchoolOutlinedIcon/>,
+    title: "Курсы",
+    path: "/courses"
   },
   {
     icon: <DomainAddIcon/>,
-    title: "Add course",
+    title: "Создать курс",
     path: "/create-course",
+  },
+  {
+    icon: <History/>,
+    title: "История",
+    path: "/history",
+  },
+  {
+    icon: <LogoutOutlinedIcon/>,
+    title: "Выход",
+    path: "/login"
   },
 ]
 
 export const MainMenu: FC<MainMenuProps> = observer(({isOpen}) => {
   const theme = useTheme()
 
+  const unsetCookie = () => {
+    document.cookie = 'login=';
+  }
+
   return (
     <MainMenuStyled isOpen={isOpen} theme={theme}>
       <List>
         {menuItems.map(item => (
           <Link style={{
-            textDecoration: 'none',
-          }} key={item.title} to={item.path}>
+                  textDecoration: 'none',
+                }}
+                key={item.title}
+                to={item.path}
+                onClick={() => item.path === '/login' && unsetCookie()}
+          >
             <ListItemButton sx={{
               minHeight: '48px',
               textDecoration: 'none',

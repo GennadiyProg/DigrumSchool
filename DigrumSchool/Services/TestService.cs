@@ -20,6 +20,7 @@ namespace DigrumSchool.Services
         {
             Test test = new Test();
             test.Title = testDto.Title;
+            Category category = _context.Categories.Where(Category => Category.Name == testDto.Category).FirstOrDefault();
             test.Category = _context.Categories.Where(Category => Category.Name == testDto.Category).FirstOrDefault();
             test.Language = _context.Languages.Where(Languages => Languages.Name == testDto.Language).FirstOrDefault();
             test.Words = new List<Word>();

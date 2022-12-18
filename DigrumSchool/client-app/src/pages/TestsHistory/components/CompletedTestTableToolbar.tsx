@@ -35,7 +35,7 @@ export const CompletedTestTableToolbar:FC<CompletedTestToolbarProps> = ({numSele
           id="tableTitle"
           component="div"
         >
-          Your tests history
+          Пройденные тесты
         </Typography>
       )}
       {numSelected > 0 ? (

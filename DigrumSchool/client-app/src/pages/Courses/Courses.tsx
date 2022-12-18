@@ -3,6 +3,7 @@ import {Button, Typography} from "@mui/material";
 import {Course} from "../../utils/types";
 import {CoursesContainer} from "./Courses.styled";
 import {CoursesList} from "./components/CoursesList";
+import {PageHeader} from "../../components/PageHeader";
 
 const initialState: Course[] = [
   {
@@ -36,7 +37,7 @@ export const Courses = () => {
   }
   return (
     <CoursesContainer>
-      <Typography variant="h3">Ваши курсы</Typography>
+      <PageHeader>Ваши курсы</PageHeader>
       <CoursesList removeCourse={removeCourse} courses={courses}/>
     </CoursesContainer>
   );

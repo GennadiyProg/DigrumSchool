@@ -5,12 +5,19 @@ import {Button} from "@mui/material";
 import {WordPrepare} from "../../../utils/types";
 
 interface InputTestWordProps {
-  createWord: (word: WordPrepare) => void
+  createWord: (word: WordPrepare) => void,
+  word: string,
+  translations: string[],
+  setTranslations: Function,
+  setWord: Function,
 }
 
-export const InputTestWord:FC<InputTestWordProps> = ({createWord}) => {
-  const [word, setWord] = useState('')
-  const [translations, setTranslations] = useState([''])
+export const InputTestWord:FC<InputTestWordProps> = ({createWord,
+                                                       word,
+                                                       translations,
+                                                       setWord,
+                                                       setTranslations
+}) => {
 
   const addTranslate = () => {
     setTranslations([...translations, ''])

@@ -5,6 +5,7 @@ import {AppCard} from "../../../components/AppCard";
 import {Button, Typography, useTheme} from "@mui/material";
 import {AppCardAdditionalInfo} from "../../../components/AppCard/AppCard.styled";
 import {CustomTheme} from "../../../themes/BasicTheme";
+import {useNavigate, useNavigation} from "react-router-dom";
 
 interface CoursesListProps {
   courses: Course[],
@@ -13,6 +14,12 @@ interface CoursesListProps {
 
 export const CoursesList:FC<CoursesListProps> = ({courses, removeCourse}) => {
   const theme: CustomTheme = useTheme()
+  const navigate = useNavigate()
+
+  const redirectToCourse = (id: number) => {
+    navigate(`/course/${id}`)
+  }
+
   return (
     <CoursesListWrapper>
       {courses.map((course) => (
@@ -24,7 +31,7 @@ export const CoursesList:FC<CoursesListProps> = ({courses, removeCourse}) => {
           <AppCardAdditionalInfo color={theme.customPalette.appCard.additionalText}>
             Тестов: {course.tests.length}
           </AppCardAdditionalInfo>
-          <Button variant="contained">Открыть</Button>
+          <Button onClick={() => redirectToCourse(course.id)} variant="contained">Открыть</Button>
         </AppCard>
       ))}
     </CoursesListWrapper>

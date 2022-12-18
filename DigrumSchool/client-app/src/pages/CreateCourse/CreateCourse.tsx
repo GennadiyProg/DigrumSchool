@@ -10,6 +10,7 @@ import {Alert, Button, CircularProgress, Typography, Zoom} from "@mui/material";
 import {getUserByUsername} from "../../api/User";
 import {createCourse} from "../../api/Course";
 import {useAlert} from "../../hooks/useAlert";
+import {PageHeader} from "../../components/PageHeader";
 
 interface SuggestedTest {
   id: number,
@@ -17,13 +18,15 @@ interface SuggestedTest {
   language: string,
   title: string
 }
+
 interface AddedUser {
   username: string,
 }
+
 const initialTest: SuggestedTest = {
   id: 0,
   title: '',
-  language:  '',
+  language: '',
   category: '',
 }
 
@@ -46,7 +49,7 @@ export const CreateCourse = () => {
     if (!response.ok) {
       return
     }
-    const data = await response.json().then((v:Test[]) => v)
+    const data = await response.json().then((v: Test[]) => v)
     const suggestedTests: SuggestedTest[] = data.map(test => {
       return {
         id: test.id,
@@ -82,7 +85,7 @@ export const CreateCourse = () => {
 
   const courseCreate = async () => {
     const response = await reqCreateCourse({
-      name: groupName,
+      groupName: groupName,
       tests: addedTests.map(test => test.id),
       participants: students.map(st => st.username)
     })
@@ -95,10 +98,12 @@ export const CreateCourse = () => {
 
   return (
     <CreateCourseContainer>
-      <Typography variant="h3" sx={{margin: '15px 0'}}>Создание курса</Typography>
-      <Zoom in={alertData.isShow}>
-        <Alert color={alertData.type}>{alertData.message}</Alert>
-      </Zoom>
+      <PageHeader>Создание курса</PageHeader>
+      {alertData.isShow && (
+        <Zoom in={alertData.isShow}>
+          <Alert color={alertData.type}>{alertData.message}</Alert>
+        </Zoom>
+      )}
       <AppInput id="groupName" label="group name" handler={(v: string) => setGroupName(v)}/>
       <HalfPart>
         <HalfPartItem>
@@ -112,12 +117,14 @@ export const CreateCourse = () => {
           <AppSimpleTable deleteHandler={removeTest} deletable={true} data={addedTests}/>
         </HalfPartItem>
       </HalfPart>
-      <Zoom in={isLoadingCourseCreate}>
-        <CircularProgress/>
-      </Zoom>
-      <Zoom in={!isLoadingCourseCreate}>
-        <Button onClick={courseCreate} variant="contained" color="success">Создать курс</Button>
-      </Zoom>
+      {isLoadingCourseCreate
+        ? <CircularProgress/>
+        : <Button disabled={!groupName}
+                  onClick={courseCreate}
+                  variant="contained"
+                  color="success"
+                  sx={{padding: '10px 0'}}>Создать курс</Button>
+      }
     </CreateCourseContainer>
   );
 };

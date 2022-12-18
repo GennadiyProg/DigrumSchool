@@ -6,6 +6,7 @@ import {Test} from "../../utils/types";
 import {useLoaderFetch} from "../../hooks/useLoaderFetch";
 import {deleteTestById, getAllByUser} from "../../api/Test";
 import {useAlert} from "../../hooks/useAlert";
+import {PageHeader} from "../../components/PageHeader";
 
 export const UserTests = () => {
   const {isLoading, LoaderFetch} = useLoaderFetch(getAllByUser)
@@ -28,7 +29,11 @@ export const UserTests = () => {
     const response = await LoaderDelete(id)
     response.ok
       ? setAlertData({isShow: true, message: 'Успешно удалили!', type: 'success'})
-      : setAlertData({isShow: true, message: 'Произошла непредвиденная ошибка. Приносим свои извинения :(', type: 'error'})
+      : setAlertData({
+        isShow: true,
+        message: 'Произошла непредвиденная ошибка. Приносим свои извинения :(',
+        type: 'error'
+      })
     const newTests = tests.filter(t => t.id !== id)
     setTests(newTests)
   }
@@ -40,8 +45,8 @@ export const UserTests = () => {
           ? <CircularProgress/>
           : (
             <>
-              <Typography variant='h4'>Мои тесты</Typography>
-              {(
+              <PageHeader>Мои тесты</PageHeader>
+              {alertData.isShow && (
                 <Zoom in={isDelLoading && alertData.isShow}>
                   <Alert severity={alertData.type}>{alertData.message}</Alert>
                 </Zoom>

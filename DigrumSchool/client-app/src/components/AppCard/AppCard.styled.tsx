@@ -8,13 +8,21 @@ interface CancelProps {
 interface TestCardWrapperProps {
   background: string,
   shadowColor: string,
+  padding: 'none' | 'small' | 'large',
+  category: boolean,
 }
 
-export const TestCardWrapper = styled.div<TestCardWrapperProps>`
+const paddings = {
+  none: 0,
+  small: '15px',
+  large: '20px 60px',
+}
+
+export const AppCardWrapper = styled.div<TestCardWrapperProps>`
   position: relative;
   display: flex;
   border-radius: 10px;
-  padding: 20px 60px;
+  padding: ${({padding}) => paddings[padding]};
   width: 100%;
   box-shadow: 0 0 8px ${({shadowColor}) => shadowColor};
   justify-content: space-between;
@@ -22,6 +30,13 @@ export const TestCardWrapper = styled.div<TestCardWrapperProps>`
   &:hover {
     box-shadow: 0 0 20px ${({shadowColor}) => shadowColor};
   }
+  ${({category}) => category && ({
+    height: '120px',
+    maxHeight: '120px',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+  })}
 `
 
 export const Cansel = styled.div<CancelProps>`

@@ -8,6 +8,7 @@ export const paths = {
   MY_TESTS_ROUTE: '/my-tests',
   HISTORY_ROUTE: '/history',
   CREATE_COURSE_ROUTE: '/create-course',
+  COURSE_ROUTE: '/course/:id',
 }
 
 // layouts

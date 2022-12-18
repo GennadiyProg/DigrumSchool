@@ -1,15 +1,23 @@
 import React, {FC, ReactNode} from 'react';
-import {Cansel, TestCardWrapper} from "./AppCard.styled";
+import {Cansel, AppCardWrapper} from "./AppCard.styled";
 import {useTheme} from "@mui/material";
 import {CustomTheme} from "../../themes/BasicTheme";
 import CancelIcon from '@mui/icons-material/Cancel';
 
 interface TestCardProps {
-  handleCancel: () => void,
+  handleCancel?: () => void,
   children?: ReactNode,
+  canceled?: boolean,
+  padding?: 'none' | 'small' | 'large',
+  category?: boolean,
 }
 
-export const AppCard:FC<TestCardProps> = ({handleCancel, children}) => {
+export const AppCard:FC<TestCardProps> = ({handleCancel,
+                                            children,
+                                            canceled= true,
+                                            padding = 'large',
+                                            category = false
+}) => {
   const theme: CustomTheme = useTheme()
   const cancelColor = {
     color: theme.customPalette.secondary.main,
@@ -18,16 +26,20 @@ export const AppCard:FC<TestCardProps> = ({handleCancel, children}) => {
   const TestCardWrapperColor = {
     background: theme.customPalette.appCard.main,
     shadowColor: theme.customPalette.appCard.shadowColor,
+    padding: padding,
+    category,
   }
   return (
-    <TestCardWrapper {...TestCardWrapperColor}>
-      <Cansel onClick={handleCancel} {...cancelColor}>
-        <CancelIcon sx={{
-          width: '100%',
-          height: '100%',
-        }}/>
-      </Cansel>
+    <AppCardWrapper {...TestCardWrapperColor}>
+      {canceled && !category && (
+        <Cansel onClick={handleCancel} {...cancelColor}>
+          <CancelIcon sx={{
+            width: '100%',
+            height: '100%',
+          }}/>
+        </Cansel>
+      )}
       {children}
-    </TestCardWrapper>
+    </AppCardWrapper>
   );
 };
