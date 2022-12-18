@@ -1,8 +1,9 @@
 import React, {FC} from 'react';
 import {UserTestsListWrapper} from "../UserTests.styled";
 import {Test} from "../../../utils/types";
-import {TestCard} from "../../../components/TestCard";
+import {AppCard} from "../../../components/AppCard";
 import {useNavigate} from "react-router-dom";
+import {Button, Typography} from "@mui/material";
 
 interface UserTestsListProps {
   tests: Test[],
@@ -18,11 +19,10 @@ export const UserTestsList:FC<UserTestsListProps> = ({tests, removeTest}) => {
   return (
     <UserTestsListWrapper>
       {tests.map(test => (
-        <TestCard key={test.id}
-                  test={test}
-                  handleStart={() => startTest(test.id)}
-                  handleCancel={() => removeTest(test.id)}
-        />
+        <AppCard key={test.id} handleCancel={() => removeTest(test.id)}>
+          <Typography variant='h6'>{test.title}</Typography>
+          <Button variant="contained" onClick={() => startTest(test.id)}>Пройти</Button>
+        </AppCard>
       ))}
     </UserTestsListWrapper>
   );

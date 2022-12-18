@@ -1,9 +1,10 @@
 import {WordPrepare} from "../utils/types";
+import {categories} from "../utils/consts";
 
 interface CompletedTest {
   TestId: number,
   Score: number,
-  CourseId?: number | null,
+  CourseId?: number | string | null,
 }
 interface Test {
   Title: string,
@@ -46,4 +47,8 @@ export const deleteTestById = async (id: number) => {
     headers: {'Content-type': 'application/json'},
     method: 'DELETE',
   })
+}
+export const getGlobalTestsByCategory = async (category: string) => {
+  // Todo: Дописать апишку
+  return await fetch('/')
 }

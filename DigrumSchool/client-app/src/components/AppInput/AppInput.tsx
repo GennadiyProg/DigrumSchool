@@ -11,6 +11,8 @@ interface AppInputProps {
   children?: ReactNode,
   handler: Function,
   value?: string,
+  onFocus?: () => void,
+  onBlur?: () => void,
 }
 
 export const AppInput: FC<AppInputProps> = (props) => {
@@ -22,6 +24,8 @@ export const AppInput: FC<AppInputProps> = (props) => {
       <OutlinedInput
         value={props.value}
         onChange={(e) => props.handler(e.target.value)}
+        onFocus={props.onFocus}
+        onBlur={props.onBlur}
         type={props.type || 'text'}
         label={props.label}
         id={props.id}

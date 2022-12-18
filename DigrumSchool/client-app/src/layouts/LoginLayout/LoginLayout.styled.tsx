@@ -25,4 +25,6 @@ export const LoginWrapper = styled.div<LoginWrapperProps>`
   background: ${() => themeStore.theme.customPalette.backgroundPrimary.light};
   border-radius: ${() => themeStore.theme.border.radius};
   border: 1px solid ${({status}) => colors[status]};
+  width: 80%;
+  max-width: 700px;
 `

@@ -1,6 +1,5 @@
 import React, {ReactNode} from "react";
 import {LOGIN_LAYOUT, MAIN_LAYOUT, paths} from "../utils/consts";
-import {Home, Login, Registration} from "../pages";
 import {MainLayout} from "../layouts/MainLayout";
 import {LoginLayout} from "../layouts/LoginLayout";
 import {Courses} from "../pages/Courses";
@@ -8,6 +7,11 @@ import {TestPage} from "../pages/Test";
 import {CreateTest} from "../pages/CreateTest";
 import {UserTests} from "../pages/UserTests";
 import {TestsHistory} from "../pages/TestsHistory";
+import {CreateCourse} from "../pages/CreateCourse";
+import {AppCourse} from "../pages/Course";
+import {Home} from "../pages/Home";
+import {Login} from "../pages/Login";
+import {Registration} from "../pages/Registration";
 
 interface Route {
   path: string,
@@ -43,6 +47,14 @@ export const routes = {
       {
         path: paths.HISTORY_ROUTE,
         component: <TestsHistory/>
+      },
+      {
+        path: paths.CREATE_COURSE_ROUTE,
+        component: <CreateCourse/>
+      },
+      {
+        path: paths.COURSE_ROUTE,
+        component: <AppCourse/>
       },
     ] as Route[]
   },

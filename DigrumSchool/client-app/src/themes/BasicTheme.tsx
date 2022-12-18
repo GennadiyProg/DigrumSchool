@@ -1,12 +1,17 @@
 import {PaletteColor, PaletteMode, Theme} from "@mui/material";
-import {amber, blue, orange, purple} from "@mui/material/colors";
+import {blue} from "@mui/material/colors";
 
 export interface CustomTheme extends Theme {
   customPalette: {
     backgroundPrimary: PaletteColor,
     backgroundGlobal: PaletteColor,
     secondary: PaletteColor,
-    testCard: PaletteColor,
+    appCard: {
+      main: string,
+      contrastText: string,
+      additionalText: string,
+      shadowColor: string,
+    },
   },
   border: {
     radius: string
@@ -25,6 +30,9 @@ export const getThemeByMode = (mode: PaletteMode) => ({
           borderRadius: '50%',
           backgroundColor: 'red',
         },
+      },
+      ul: {
+        padding: '0',
       }
     }
   },
@@ -53,12 +61,14 @@ export const getThemeByMode = (mode: PaletteMode) => ({
             main: '#ffffff'
           },
           secondary: {
-            main: '#ffffff'
+            main: '#464646'
           },
-          testCard: {
+          appCard: {
             main: '#fff',
-            contrastText: '#000'
-          }
+            contrastText: '#000',
+            additionalText: '#2A3238',
+            shadowColor: 'rgba(0, 0, 0, .12)'
+          },
         }
         : {
           // Dark mode
@@ -72,9 +82,11 @@ export const getThemeByMode = (mode: PaletteMode) => ({
           secondary: {
             main: '#464646'
           },
-          testCard: {
+          appCard: {
             main: '#222626',
-            contrastText: '#fff'
+            contrastText: '#fff',
+            additionalText: '#7a7c83',
+            shadowColor: 'rgba(0, 0, 0, 1)'
           }
         }
     ),
