@@ -1,5 +1,6 @@
 ﻿using DigrumSchool.Models;
 using DigrumSchool.Models.Dto;
+using DigrumSchool.Models.ViewModel;
 using DigrumSchool.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -118,6 +119,28 @@ namespace DigrumSchool.Controllers
             }
             courseService.DeleteTest(courseId, testId);
             return Ok();
+        }
+
+        [HttpGet("leaderboard/{courseId}")]
+        public ActionResult<List<StatInCourseVM>> GetLidearboard(int courseId)
+        {
+            User? currentUser = CheckAuth();
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+            return courseService.GetLidearboard(courseId);
+        }
+
+        [HttpGet("participant/{participant?}")]
+        public ActionResult<List<Course>> FindAllByParticipant(string? participant)
+        {
+            User? currentUser = CheckAuth();
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+            return courseService.FindAllByParticipant(participant == null ? currentUser.Username : participant);
         }
     }
 }

@@ -20,7 +20,6 @@ namespace DigrumSchool.Services
         {
             Test test = new Test();
             test.Title = testDto.Title;
-            Category category = _context.Categories.Where(Category => Category.Name == testDto.Category).FirstOrDefault();
             test.Category = _context.Categories.Where(Category => Category.Name == testDto.Category).FirstOrDefault();
             test.Language = _context.Languages.Where(Languages => Languages.Name == testDto.Language).FirstOrDefault();
             test.Words = new List<Word>();
@@ -43,7 +42,13 @@ namespace DigrumSchool.Services
                 }
                 test.Words.Add(newWord);
             }
-            test.IsGeneral = testDto.IsGeneral;
+            if (currentUser.Role.Name == "Admin" && testDto.IsGeneral)
+            {
+                test.IsGeneral = testDto.IsGeneral;
+            } else
+            {
+                test.IsGeneral = false;
+            }            
             test.Creator = currentUser;
             _context.Tests.Add(test);
             _context.SaveChanges();
@@ -91,6 +96,11 @@ namespace DigrumSchool.Services
             {
                 return FindCompletedTestListByExpretion(t => t.User.Id == user.Id);
             }
+        }
+
+        public List<Test> FindAllGeneralTestsByCategory(string category)
+        {
+            return FindTestListByExpretion(t => t.IsGeneral && t.Category.Name == category);
         }
 
         private Test? FindTestByExpretion(Expression<Func<Test, bool>> expression)

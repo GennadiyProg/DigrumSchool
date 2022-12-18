@@ -91,5 +91,11 @@ namespace DigrumSchool.Controllers
             }
             return testService.FindCompletedTests(id, currentUser);
         }
+
+        [HttpGet("general/{category}")]
+        public ActionResult<List<Test>> FindAllGeneralTests(string category)
+        {
+            return testService.FindAllGeneralTestsByCategory(category);
+        }
     }
 }

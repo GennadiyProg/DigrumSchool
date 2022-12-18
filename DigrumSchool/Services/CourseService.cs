@@ -1,6 +1,7 @@
 ﻿using DigrumSchool.Config;
 using DigrumSchool.Models;
 using DigrumSchool.Models.Dto;
+using DigrumSchool.Models.ViewModel;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -11,11 +12,13 @@ namespace DigrumSchool.Services
     {
         private readonly SchoolContext _context;
         private readonly TestService testService;
+        private readonly UserService userService;
 
-        public CourseService(SchoolContext context, TestService testService)
+        public CourseService(SchoolContext context, TestService testService, UserService userService)
         {
             _context = context;
             this.testService = testService;
+            this.userService = userService;
         }
 
         public Course Create(User creator, CourseDto courseDto)
@@ -92,6 +95,29 @@ namespace DigrumSchool.Services
             Course course = FindCourseByExpretion(c => c.Id == courseId);
             course.Tests.Remove(_context.Tests.Where(t => t.Id == testId).First());
             _context.SaveChanges();
+        }
+
+        public List<StatInCourseVM> GetLidearboard(int courseId)
+        {
+            List<User> participants = FindCourseByExpretion(c => c.Id == courseId).Participants.ToList();
+            List<StatInCourseVM> liderboard = new List<StatInCourseVM>();
+            participants.ForEach(p =>
+            {
+                liderboard.Add(new StatInCourseVM
+                {
+                    User = p.Username,
+                    Score = _context.CompletedTests
+                        .Where(ct => ct.User.Id == p.Id && ct.Course != null && ct.Course.Id == courseId)
+                        .GroupBy(ct => ct.Test.Id).Select(t => t.Select(t => t.Score).Max()).Sum()
+                });
+            });
+            return liderboard;
+        }
+
+        public List<Course> FindAllByParticipant(string participant)
+        {
+            List<int> courses = userService.FindUserByUsername(participant).Courses.Select(c => c.Id).ToList();
+            return FindListCoursesByExpretion(c => courses.Contains(c.Id));
         }
 
         private Course? FindCourseByExpretion(Expression<Func<Course, bool>> expression)
