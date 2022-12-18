@@ -15,10 +15,12 @@ namespace DigrumSchool.Controllers
     public class UserController : Controller
     {
         private readonly UserService userService;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(UserService userService)
+        public UserController(UserService userService, ILogger<UserController> logger)
         {
             this.userService = userService;
+            _logger = logger;
         }
 
         [HttpPost("register")]
@@ -36,6 +38,7 @@ namespace DigrumSchool.Controllers
         [HttpPost("login")]
         public ActionResult<User> Login(UserDto userDto)
         {
+            _logger.LogInformation($"Login user with username: {userDto.UserName}");
             User? user = userService.Login(userDto);
             
             if (user != null)
