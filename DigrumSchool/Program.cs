@@ -13,6 +13,7 @@ opt.UseNpgsql("Server=localhost;Port=5432;Database=DigrumSchool;UserId=postgres;
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<TestService>();
 builder.Services.AddScoped<CourseService>();
+builder.Services.AddScoped<ApplicationService>();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var app = builder.Build();

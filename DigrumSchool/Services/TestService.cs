@@ -114,7 +114,7 @@ namespace DigrumSchool.Services
                 .First();
         }
 
-        private List<Test> FindTestListByExpretion(Expression<Func<Test, bool>> expression)
+        public List<Test> FindTestListByExpretion(Expression<Func<Test, bool>> expression)
         {
             return _context.Tests
                 .Where(expression)

@@ -16,6 +16,7 @@ namespace DigrumSchool.Config
         public DbSet<Test> Tests { get; set; }
         public DbSet<Translation> Translations { get; set; }
         public DbSet<Word> Words { get; set; }
+        public DbSet<Application> Applications { get; set; }
 
         public SchoolContext(DbContextOptions<SchoolContext> options) : base(options)
         {
@@ -69,6 +70,12 @@ namespace DigrumSchool.Config
                 .WithMany()
                 .HasForeignKey("TestId")
                 .IsRequired(false);
+
+            modelBuilder.Entity<Application>()
+                .HasOne(a => a.Test)
+                .WithMany()
+                .HasForeignKey("TestId")
+                .IsRequired();
         }
     }
 }

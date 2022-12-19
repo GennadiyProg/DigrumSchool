@@ -206,6 +206,26 @@ namespace DigrumSchool.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Applications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    TestId = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Applications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Applications_Tests_TestId",
+                        column: x => x.TestId,
+                        principalTable: "Tests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CompletedTests",
                 columns: table => new
                 {
@@ -287,6 +307,11 @@ namespace DigrumSchool.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Applications_TestId",
+                table: "Applications",
+                column: "TestId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CompletedTests_CourseId",
                 table: "CompletedTests",
                 column: "CourseId");
@@ -354,6 +379,9 @@ namespace DigrumSchool.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Applications");
+
             migrationBuilder.DropTable(
                 name: "CompletedTests");
 

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DigrumSchool.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20221212174255_Init")]
+    [Migration("20221219170722_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,6 +52,27 @@ namespace DigrumSchool.Migrations
                     b.HasIndex("ParticipantsId");
 
                     b.ToTable("CourseUser");
+                });
+
+            modelBuilder.Entity("DigrumSchool.Models.Application", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TestId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestId");
+
+                    b.ToTable("Applications");
                 });
 
             modelBuilder.Entity("DigrumSchool.Models.Category", b =>
@@ -319,6 +340,17 @@ namespace DigrumSchool.Migrations
                         .HasForeignKey("ParticipantsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DigrumSchool.Models.Application", b =>
+                {
+                    b.HasOne("DigrumSchool.Models.Test", "Test")
+                        .WithMany()
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Test");
                 });
 
             modelBuilder.Entity("DigrumSchool.Models.CompletedTest", b =>
