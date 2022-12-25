@@ -69,7 +69,7 @@ namespace DigrumSchool.Controllers
             return Ok();
         }
 
-        [HttpPost("created")]
+        [HttpGet("created")]
         public ActionResult<List<Test>> FindAllCreated()
         {
             User? currentUser = CheckAuth();
@@ -84,7 +84,7 @@ namespace DigrumSchool.Controllers
             return new List<Test>();
         }
 
-        [HttpPost("approved")]
+        [HttpGet("approved")]
         public ActionResult<List<Test>> FindAllApproved()
         {
             User? currentUser = CheckAuth();
