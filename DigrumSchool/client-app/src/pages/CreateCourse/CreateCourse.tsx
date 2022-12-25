@@ -4,13 +4,14 @@ import {CreateCourseContainer, HalfPart, HalfPartItem} from "./CreateCourse.styl
 import {AppSearch} from "../../components/AppSearch";
 import {AppSimpleTable} from "../../components/AppSimpleTable";
 import {useLoaderFetch} from "../../hooks/useLoaderFetch";
-import {getAllByUser, getTestById} from "../../api/Test";
-import {Test, User} from "../../utils/types";
+import {getAllByUser} from "../../api/Test";
+import {Course, Test, User} from "../../utils/types";
 import {Alert, Button, CircularProgress, Typography, Zoom} from "@mui/material";
 import {getUserByUsername} from "../../api/User";
-import {createCourse} from "../../api/Course";
+import {createCourse, getCourseById, updateCourse} from "../../api/Course";
 import {useAlert} from "../../hooks/useAlert";
 import {PageHeader} from "../../components/PageHeader";
+import {useQuery} from "../../hooks/useQuery";
 
 interface SuggestedTest {
   id: number,
@@ -37,12 +38,36 @@ export const CreateCourse = () => {
   const [suggestedTests, setSuggestedTests] = useState<SuggestedTest[]>([])
   const [addedTests, setAddedTests] = useState<SuggestedTest[]>([])
   const {isLoading, LoaderFetch} = useLoaderFetch(getAllByUser)
+  const {isLoading: isCourseLoading, LoaderFetch: fetchCourse} = useLoaderFetch(getCourseById)
   const {isLoading: isUserLoading, LoaderFetch: getUser} = useLoaderFetch(getUserByUsername)
   const {isLoading: isLoadingCourseCreate, LoaderFetch: reqCreateCourse} = useLoaderFetch(createCourse)
+  const {isLoading: isUpdateLoading, LoaderFetch: fetchUpdateCourse} = useLoaderFetch(updateCourse)
+  const [isUpdateMode, setIsUpdateMode] = useState(false)
   const {alertData, setAlertData} = useAlert()
+  const search = useQuery()
+
+  const fillCourse = async (id: number) => {
+    const response = await fetchCourse(id)
+    const data: Course = await response.json() as Course
+    setStudents([...data.participants.map(p => ({username: p.username}))])
+    setGroupName(data.groupName)
+    // падает потому что сейчас category & language приходят null
+    const sugTests: SuggestedTest[] = data.tests.map(test => ({
+      id: test.id,
+      title: test.title,
+      category: test.category.name,
+      language: test.language.name,
+    }))
+    setAddedTests(sugTests)
+    setIsUpdateMode(true)
+  }
 
   useEffect(() => {
     getTests()
+    const testId = search.get('id')
+    if (testId) {
+      fillCourse(+testId)
+    }
   }, [])
   const getTests = async () => {
     const response = await LoaderFetch()
@@ -82,7 +107,6 @@ export const CreateCourse = () => {
     const newTests = allTests.filter(test => test.title.includes(searchName) && !addedTests.includes(test))
     setSuggestedTests(newTests)
   }
-
   const courseCreate = async () => {
     const response = await reqCreateCourse({
       groupName: groupName,
@@ -95,6 +119,19 @@ export const CreateCourse = () => {
     }
     setAlertData({type: 'success', isShow: true, message: 'Курс успешно создан'})
   }
+  const courseUpdate = async () => {
+    const response = await fetchUpdateCourse({
+      id: search.get('id'),
+      groupName: groupName,
+      tests: addedTests.map(test => test.id),
+      participants: students.map(st => st.username)
+    })
+    if (!response.ok) {
+      setAlertData({type: 'error', isShow: true, message: 'Простите, курс не был обновлен, попробуйте позднее :('})
+      return
+    }
+    setAlertData({type: 'success', isShow: true, message: 'Курс успешно обновлен'})
+  }
 
   return (
     <CreateCourseContainer>
@@ -104,7 +141,7 @@ export const CreateCourse = () => {
           <Alert color={alertData.type}>{alertData.message}</Alert>
         </Zoom>
       )}
-      <AppInput id="groupName" label="group name" handler={(v: string) => setGroupName(v)}/>
+      <AppInput id="groupName" value={groupName} label="group name" handler={(v: string) => setGroupName(v)}/>
       <HalfPart>
         <HalfPartItem>
           <Typography variant="h5">Пригласите людей</Typography>
@@ -120,10 +157,10 @@ export const CreateCourse = () => {
       {isLoadingCourseCreate
         ? <CircularProgress/>
         : <Button disabled={!groupName}
-                  onClick={courseCreate}
+                  onClick={isUpdateMode ? courseUpdate : courseCreate}
                   variant="contained"
                   color="success"
-                  sx={{padding: '10px 0'}}>Создать курс</Button>
+                  sx={{padding: '10px 0'}}>{isUpdateMode ? 'Обновить курс' : 'Создать курс'}</Button>
       }
     </CreateCourseContainer>
   );

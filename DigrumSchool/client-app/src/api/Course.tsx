@@ -1,10 +1,11 @@
-interface CreateCourseBody {
+interface CourseBody {
+  id?: number | string | null,
   groupName: string,
   participants: string[],
   tests: number[],
 }
 
-export const createCourse = async (body: CreateCourseBody) => {
+export const createCourse = async (body: CourseBody) => {
   return await fetch('/course/create', {
     headers: {
       'Content-type': 'application/json',
@@ -32,4 +33,20 @@ export const getCoursesByCreator = async (creatorUsername?: string) => {
 
 export const getCoursesByParticipant = async (username?: string) => {
   return await fetch(`/course/participant/${username || ''}`)
+}
+
+export const updateCourse = async (body: CourseBody) => {
+  return await fetch('/course/update', {
+    headers: {
+      'Content-type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(body)
+  })
+}
+
+export const deleteTestFromCourse = async (courseId: number, testId: number) => {
+  return await fetch(`/course/deletetest/${courseId}/${testId}`, {
+    method: 'POST'
+  })
 }

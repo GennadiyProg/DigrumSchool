@@ -7,6 +7,7 @@ import {PageHeader} from "../../components/PageHeader";
 import {useLoaderFetch} from "../../hooks/useLoaderFetch";
 import {getGlobalTestsByCategory} from "../../api/Test";
 import {CategoryTestsWrapper} from "./CategoryTests.styled";
+import {AppCardBtns} from "../../components/AppCard/AppCard.styled";
 
 export const CategoryTests = () => {
   const [tests, setTests] = useState<Test[]>([])
@@ -28,14 +29,19 @@ export const CategoryTests = () => {
     const data = await response.json()
     setTests(data)
   }
-
+  const preview = (id: number) => {
+    navigate(`/view/${id}`)
+  }
   return (
     <CategoryTestsWrapper>
       <PageHeader>Тесты в категории {params.category}</PageHeader>
       {tests.map(test => (
         <AppCard key={test.id} canceled={false}>
           <Typography variant='h6'>{test.title}</Typography>
-          <Button variant="contained" onClick={() => startTest(test.id)}>Пройти</Button>
+          <AppCardBtns>
+            <Button variant="contained" onClick={() => startTest(test.id)}>Пройти</Button>
+            <Button variant="contained" color="warning" onClick={() => preview(test.id)}>Учить</Button>
+          </AppCardBtns>
         </AppCard>
       ))}
     </CategoryTestsWrapper>

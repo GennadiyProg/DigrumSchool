@@ -32,11 +32,9 @@ const CreateTestComponent = () => {
   const handleCategory = (e: SelectChangeEvent) => {
     setCategory(e.target.value)
   }
-
   const handleLanguage = (e: SelectChangeEvent) => {
     setLanguage(e.target.value)
   }
-
   const selects: SelectControl[] = [
     {
       label: 'Category',
@@ -53,13 +51,11 @@ const CreateTestComponent = () => {
       helperText: 'Выберите язык',
     },
   ]
-
   const createWord = (word: WordPrepare) => {
     setWords([...words, word])
     setWord('')
     setTranslations([''])
   }
-
   const create = async () => {
     const response = await LoaderFetch({
       Title: title,
@@ -79,7 +75,6 @@ const CreateTestComponent = () => {
     setAlertData({type: 'success', message: 'Тест успешно добавлен', isShow: true})
     cleanFields()
   }
-
   const cleanFields = () => {
     setLanguage('')
     setTitle('')

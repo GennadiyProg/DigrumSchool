@@ -14,6 +14,8 @@ import {Login} from "../pages/Login";
 import {Registration} from "../pages/Registration";
 import {CategoryTests} from "../pages/CategoryTests";
 import {ProtectedRoute} from "../hocks/ProtectedRoute";
+import {ApplicationRequests} from "../pages/ApplicationRequests";
+import {TestView} from "../pages/TestView";
 
 interface Route {
   path: string,
@@ -62,6 +64,14 @@ export const routes = {
         path: paths.CATEGORY_ROUTE,
         component: <CategoryTests/>
       },
+      {
+        path: paths.APPLICATIONS_ROUTE,
+        component: <ApplicationRequests/>
+      },
+      {
+        path: paths.TEST_VIEW_ROUTE,
+        component: <TestView/>
+      }
     ] as Route[]
   },
   LoginLayout: {

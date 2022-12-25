@@ -25,14 +25,9 @@ export const AppSimpleTable: FC<AppSimpleTableProps> = ({
       border: 0
     }
   })
-  const ad = (obj: any) => {
-    console.log(typeof itemChosen)
-    typeof itemChosen === "function" && itemChosen(obj)
-  }
   const SearchRowStyles = {
     cursor: 'pointer'
   }
-
   useEffect(() => {
     if (isSearchBody) {
       setTableRowStyles({...tableRowStyles, ...SearchRowStyles})
