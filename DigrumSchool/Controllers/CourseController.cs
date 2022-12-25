@@ -39,16 +39,15 @@ namespace DigrumSchool.Controllers
         }
 
         [HttpPost("update")]
-        public ActionResult<Course> Update(CourseUpdateDto courseDto)
+        public IActionResult Update(CourseUpdateDto courseDto)
         {
             User? currentUser = CheckAuth();
             if (currentUser == null)
             {
                 return Unauthorized();
             }
-            Course? course = courseService.Update(courseDto);
-            if (course == null) return Ok("Course or test not found");
-            return course;
+            courseService.Update(courseDto);
+            return Ok();
         }
 
         [HttpPost("addparticipant")]
