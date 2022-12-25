@@ -40,6 +40,7 @@ namespace DigrumSchool.Services
             {
                 return;
             }
+            course.GroupName = courseDto.GroupName;
             List<User> participants = _context.Users.Where(u => courseDto.Participants.Contains(u.Username)).ToList();
             if (course.Participants == null)
             {
