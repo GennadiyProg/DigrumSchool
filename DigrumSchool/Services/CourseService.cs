@@ -33,6 +33,29 @@ namespace DigrumSchool.Services
             return FindCourseByExpretion(c => c.Id == course.Id) ?? throw new ArgumentNullException();
         }
 
+        public Course? Update(CourseUpdateDto courseDto)
+        {
+            Course? course = _context.Courses.Where(c => c.Id == courseDto.Id).FirstOrDefault();
+            if (course == null)
+            {
+                return null;
+            }
+            List<User> participants = _context.Users.Where(u => courseDto.Participants.Contains(u.Username)).ToList();
+            if (course.Participants == null)
+            {
+                course.Participants = new List<User>();
+            }
+            participants.ForEach(p => course.Participants.Add(p));
+            List<Test> foundedTests = _context.Tests.Where(t => courseDto.Tests.Contains(t.Id)).ToList();
+            if (course.Tests == null)
+            {
+                course.Tests = new List<Test>();
+            }
+            foundedTests.ForEach(t => course.Tests.Add(t));
+            _context.SaveChanges();
+            return FindCourseByExpretion(c => c.Id == course.Id) ?? throw new ArgumentNullException();
+        }
+
         public Course? AddParticipants(CourseParticipantsDto courseParticipants)
         {
             Course? course = _context.Courses.Where(c => c.Id == courseParticipants.CourseId).FirstOrDefault();
