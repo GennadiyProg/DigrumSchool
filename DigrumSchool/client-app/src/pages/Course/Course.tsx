@@ -1,9 +1,9 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {CourseContainer, CourseContent, SideMenuContainer, TestContainer} from "./Course.styled";
-import {CircularProgress, Typography} from "@mui/material";
+import {Button, CircularProgress, Typography} from "@mui/material";
 import {useLoaderFetch} from "../../hooks/useLoaderFetch";
-import {getCourseById, getLeaderboard, getUserCompletedTestsByCourse} from "../../api/Course";
-import {useParams} from "react-router-dom";
+import {deleteTestFromCourse, getCourseById, getLeaderboard, getUserCompletedTestsByCourse} from "../../api/Course";
+import {useNavigate, useParams} from "react-router-dom";
 import {TestsList} from "./components/TestsList";
 import {CompletedTest, Course, Test} from "../../utils/types";
 import {SideMenu} from "./components/SideMenu";
@@ -35,11 +35,16 @@ const initialLeaderboard = [{
 const AppCourseComponent = () => {
   const {isLoading, LoaderFetch: fetchCourse} = useLoaderFetch(getCourseById)
   const {isLoading: isLoadingLeaderboard, LoaderFetch: fetchLeaderboard} = useLoaderFetch(getLeaderboard)
-  const {isLoading: isLoadingCompletedTests, LoaderFetch: fetchCompletedTests} = useLoaderFetch(getUserCompletedTestsByCourse)
+  const {
+    isLoading: isLoadingCompletedTests,
+    LoaderFetch: fetchCompletedTests
+  } = useLoaderFetch(getUserCompletedTestsByCourse)
+  const {isLoading: isDeleteLoading, LoaderFetch: fetchDeleteTest} = useLoaderFetch(deleteTestFromCourse)
   const [course, setCourse] = useState<Course>(initialCourse)
   const [allCompletedTests, setAllCompletedTests] = useState<CompletedTest[]>([])
   const [leaderboard, setLeaderboard] = useState<Leaderboard[]>(initialLeaderboard)
   const params = useParams()
+  const navigate = useNavigate()
   const isCreator = useMemo(() => {
     return userStore.user?.username === course.creator.username
   }, [userStore.user, course.creator.username])
@@ -73,7 +78,7 @@ const AppCourseComponent = () => {
     if (params.id) {
       const response = await fetchLeaderboard(Number(params.id))
       if (!response.ok) return
-      
+
       const data = await response.json()
       setLeaderboard(data)
     }
@@ -97,7 +102,13 @@ const AppCourseComponent = () => {
       content: leaderboard.map(el => ({...el, id: el.user})),
     },
   ]
-
+  const redirectToEdit = () => {
+    navigate(`/create-course?id=${course.id}`)
+  }
+  const removeTest = (testId: number) => {
+    setCourse({...course, tests: [...course.tests.filter(test => test.id !== testId)]})
+    fetchDeleteTest(course.id, testId)
+  }
   return (
     <CourseContainer>
       {
@@ -108,10 +119,13 @@ const AppCourseComponent = () => {
               <PageHeader>{course.groupName}</PageHeader>
               <CourseContent>
                 <TestContainer>
-                  <TestsList isCreator={isCreator} tests={course.tests}/>
+                  <TestsList removeTest={removeTest} isCreator={isCreator} tests={course.tests}/>
                 </TestContainer>
                 <SideMenuContainer>
                   <SideMenu menuItems={menuItems}/>
+                  {isCreator && (
+                    <Button variant="contained" onClick={redirectToEdit}>Редактировать</Button>
+                  )}
                 </SideMenuContainer>
               </CourseContent>
             </>

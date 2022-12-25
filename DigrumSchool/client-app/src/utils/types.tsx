@@ -74,3 +74,11 @@ export interface AppAlert {
   message: string,
   isShow: boolean,
 }
+
+export interface Application {
+  id?: number,
+  title: string,
+  category: {id?: number, name: string},
+  language: {id?: number, name: string},
+  words: Word[]
+}

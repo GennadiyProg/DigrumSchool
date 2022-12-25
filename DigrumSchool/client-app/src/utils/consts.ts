@@ -9,7 +9,9 @@ export const paths = {
   HISTORY_ROUTE: '/history',
   CREATE_COURSE_ROUTE: '/create-course',
   COURSE_ROUTE: '/course/:id',
-  CATEGORY_ROUTE: '/category/:category'
+  CATEGORY_ROUTE: '/category/:category',
+  APPLICATIONS_ROUTE: '/applications',
+  TEST_VIEW_ROUTE: '/view/:id',
 }
 
 // layouts

@@ -5,13 +5,11 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
-  TablePagination,
   TableRow,
   useTheme
 } from '@mui/material';
 import React, {FC, useEffect, useState} from 'react';
-import {Word, WordPrepare} from "../../../utils/types";
+import {WordPrepare} from "../../../utils/types";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {CreateTestPreviewContainer} from "../CreateTest.styled";
 

@@ -23,7 +23,6 @@ const initialTest: Test = {
   words: [],
 }
 
-
 export const TestPage = () => {
   const [test, setTest] = useState<Test>(initialTest)
   const [index, setIndex] = useState(-1)

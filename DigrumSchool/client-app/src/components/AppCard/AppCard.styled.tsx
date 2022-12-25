@@ -59,3 +59,8 @@ export const AppCardAdditionalInfo = styled.p<{color: string}>`
   display: flex;
   align-items: center;
 `
+
+export const AppCardBtns = styled.div`
+  display: flex;
+  gap: 10px;
+`

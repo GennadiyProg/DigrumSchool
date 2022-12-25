@@ -12,16 +12,20 @@ import {MainMenuStyled} from "./MainMenu.styled";
 import {History} from "@mui/icons-material";
 import {userStore} from "../../stores/UserStore";
 import {useAuth} from "../../hooks/useAuth";
+import DescriptionIcon from '@mui/icons-material/Description';
 
 interface MainMenuProps {
   isOpen: boolean,
 }
+
+type RoleType = 'Admin' | 'Teacher' | 'User' | 'all' | undefined
 
 interface menuItem {
   icon: ReactNode,
   title: string,
   path: string,
   protected: boolean,
+  roles: RoleType[]
 }
 
 const menuItems: menuItem[] = [
@@ -30,42 +34,56 @@ const menuItems: menuItem[] = [
     title: "Главная",
     path: "/",
     protected: false,
+    roles: ['all'],
   },
   {
     icon: <AddCircleOutlineIcon/>,
     title: "Создать тест",
     path: "/create",
     protected: true,
+    roles: ['User', 'Teacher', 'Admin'],
   },
   {
     icon: <FlagIcon/>,
     title: "Мои тесты",
     path: "/my-tests",
     protected: true,
+    roles: ['User', 'Teacher', 'Admin'],
   },
   {
     icon: <SchoolOutlinedIcon/>,
     title: "Курсы",
     path: "/courses",
     protected: true,
+    roles: ['User', 'Teacher', 'Admin'],
   },
   {
     icon: <DomainAddIcon/>,
     title: "Создать курс",
     path: "/create-course",
     protected: true,
+    roles: ['User', 'Teacher', 'Admin'],
   },
   {
     icon: <History/>,
     title: "История",
     path: "/history",
     protected: false,
+    roles: ['all'],
+  },
+  {
+    icon: <DescriptionIcon/>,
+    title: "Заявки",
+    path: "/applications",
+    protected: true,
+    roles: ['Admin', 'Teacher'],
   },
   {
     icon: <LogoutOutlinedIcon/>,
     title: "Выход",
     path: "/login",
     protected: false,
+    roles: ['all'],
 
   },
 ]
@@ -82,11 +100,11 @@ export const MainMenu: FC<MainMenuProps> = observer(({isOpen}) => {
   return (
     <MainMenuStyled isOpen={isOpen} theme={theme}>
       <List>
-        {menuItems.map(item => (
+        {menuItems.filter(item => item.roles.includes('all') || item.roles.includes(userStore.user?.role.name)).map(item => (
           <Link style={{
-                  textDecoration: 'none',
-                  pointerEvents: item.protected && !isAuth ? 'none' : 'auto'
-                }}
+            textDecoration: 'none',
+            pointerEvents: item.protected && !isAuth ? 'none' : 'auto'
+          }}
                 key={item.title}
                 to={item.path}
                 onClick={() => item.path === '/login' && unsetCookie()}
@@ -100,7 +118,8 @@ export const MainMenu: FC<MainMenuProps> = observer(({isOpen}) => {
                 minWidth: '50px',
                 color: '#fff',
               }}>{item.icon}</ListItemIcon>
-              {isOpen && <ListItemText>{item.path === '/login' ? (userStore.user ? "Выход" : "Вход") : item.title}</ListItemText>}
+              {isOpen &&
+                  <ListItemText>{item.path === '/login' ? (userStore.user ? "Выход" : "Вход") : item.title}</ListItemText>}
             </ListItemButton>
           </Link>
         ))}
