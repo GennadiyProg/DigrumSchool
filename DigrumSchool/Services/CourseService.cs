@@ -92,12 +92,25 @@ namespace DigrumSchool.Services
 
         public Course FindById(int courseId)
         {
-            return FindCourseByExpretion(c => c.Id == courseId) ?? new Course();
+            Course course = FindCourseByExpretion(c => c.Id == courseId) ?? new Course();
+            if(course.Tests != null)
+            {
+                course.Tests.ToList().ForEach(t => t = testService.FindById(t.Id));
+            }
+            return course;
         }
 
         public List<Course> FindAllByCreator(string username)
         {
-            return FindListCoursesByExpretion(c => c.Creator.Username == username) ?? new List<Course>();
+            List<Course> courses = FindListCoursesByExpretion(c => c.Creator.Username == username) ?? new List<Course>();
+            courses.ForEach(course =>
+            {
+                if (course.Tests != null)
+                {
+                    course.Tests.ToList().ForEach(t => t = testService.FindById(t.Id));
+                }
+            });            
+            return courses;
         }
 
         public List<CompletedTest> FindAllCompletedTestsByCourse(int courseId, int? userId)
@@ -139,8 +152,16 @@ namespace DigrumSchool.Services
 
         public List<Course> FindAllByParticipant(string participant)
         {
-            List<int> courses = userService.FindUserByUsername(participant).Courses.Select(c => c.Id).ToList();
-            return FindListCoursesByExpretion(c => courses.Contains(c.Id));
+            List<int> coursesId = userService.FindUserByUsername(participant).Courses.Select(c => c.Id).ToList();
+            List<Course> courses = FindListCoursesByExpretion(c => coursesId.Contains(c.Id));
+            courses.ForEach(course =>
+            {
+                if (course.Tests != null)
+                {
+                    course.Tests.ToList().ForEach(t => t = testService.FindById(t.Id));
+                }
+            });
+            return courses;
         }
 
         private Course? FindCourseByExpretion(Expression<Func<Course, bool>> expression)
